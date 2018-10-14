@@ -24,3 +24,7 @@ Install the following plugins:
 
 - Clean project: run `npm run build-ts`
 - Development: run `npm run start:dev`
+
+## Running tests
+
+- Run `npm test`
