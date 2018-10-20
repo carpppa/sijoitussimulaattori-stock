@@ -1,5 +1,5 @@
 {
-  "name": "sijoitussimulaattori-profile",
+  "name": "sijoitussimulaattori-stock",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/carpppa/sijoitussimulaattori-profile.git"
+    "url": "git+https://github.com/carpppa/sijoitussimulaattori-stock.git"
   },
   "author": "Sijoitussimulaattori Team",
   "license": "MIT",

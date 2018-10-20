@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.com/carpppa/sijoitussimulaattori-profile.svg?token=xQqx3oEyeT4LX1PHsDTx&branch=master)](https://travis-ci.com/carpppa/sijoitussimulaattori-profile)
-# sijoitussimulaattori-profile
+[![Build Status](https://travis-ci.com/carpppa/sijoitussimulaattori-stock.svg?token=xQqx3oEyeT4LX1PHsDTx&branch=master)](https://travis-ci.com/carpppa/sijoitussimulaattori-stock)
+
+# sijoitussimulaattori-stock
 
 ## Project setup instructions for vscode (recommended)
 
