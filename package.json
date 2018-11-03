@@ -40,13 +40,18 @@
     "express": "^4.16.4",
     "express-boom": "^2.0.0",
     "express-joi-validation": "^0.3.0",
-    "joi": "^13.7.0"
+    "joi": "^13.7.0",
+    "knex": "^0.15.2",
+    "pg": "^7.6.0",
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
     "@types/jest": "^23.3.5",
     "@types/joi": "^13.6.1",
+    "@types/knex": "^0.14.26",
     "@types/node": "^10.11.7",
+    "@types/pg": "^7.4.11",
     "@types/supertest": "^2.0.6",
     "concurrently": "^4.0.1",
     "env-cmd": "^8.0.2",

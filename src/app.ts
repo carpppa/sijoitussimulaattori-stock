@@ -4,6 +4,9 @@ import * as Joi from 'joi';
 import * as boom from 'express-boom';
 import { NextFunction, Request, Response } from 'express';
 import { Routes } from './routes';
+import client from './db';
+import * as Knex from 'knex';
+import logger from './util/logger';
 
 interface JoiExpressError extends Error {
   error: Joi.ValidationError;
@@ -12,12 +15,14 @@ interface JoiExpressError extends Error {
 class App {
   public app: express.Application;
   public routeProvider: Routes = new Routes();
+  public dbClient: Knex;
 
   constructor() {
     this.app = express();
     this.routeConfig();
     this.routeProvider.routes(this.app);
     this.config();
+    this.dbClient = client;
   }
 
   private routeConfig(): void {
