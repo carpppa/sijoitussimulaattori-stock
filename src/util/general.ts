@@ -8,7 +8,7 @@ const ensureNecessaryEnvs = (mandatoryEnvs: string[]): void => {
     return;
   }
   throw new Error(
-    'Required ENV variables are not set: [' + missingEnvs.join(', ') + ']'
+    'Required ENV variables are not set: ' + missingEnvs.join(', ') + ''
   );
 };
 

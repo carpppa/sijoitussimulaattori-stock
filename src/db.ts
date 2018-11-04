@@ -15,14 +15,7 @@ const pool = new Pool({
   connectionString: config.db.CONNECTION_STRING,
 });
 
-client.raw('SELECT 1').then((res) => logger.debug('testi', res));
-
-const testDBConnection = async () =>
-  pool
-    .query('SELECT 1')
-    .then((res) => logger.info('MORO', res))
-    .catch((err) => logger.debug('database err', err));
-
-testDBConnection().then(() =>
-  pool.end(() => logger.info('database pool closed'))
-);
+client
+  .raw('SELECT 1')
+  .then((res) => logger.debug('db test query', res))
+  .catch((err) => logger.error('db test query failed', err));
