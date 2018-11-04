@@ -11,7 +11,10 @@
     "build-ts": "tsc",
     "watch-ts": "tsc -w",
     "watch-serve": "env-cmd .env nodemon -L --watch ./dist --exec \"node --inspect\" ./dist/index.js",
-    "heroku-postbuild": "bash ./tools/build.sh"
+    "heroku-postbuild": "bash ./tools/build.sh",
+    "migrate:create": "env-cmd .env knex migrate:make",
+    "migrate:make": "env-cmd .env knex migrate:latest",
+    "migrate:rollback": "env-cmd .env knex migrate:rollback"
   },
   "jest": {
     "moduleFileExtensions": [

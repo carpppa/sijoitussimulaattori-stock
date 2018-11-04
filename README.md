@@ -41,3 +41,9 @@ Install the following plugins:
 ## Running tests
 
 - Run `npm test`
+
+## Database
+
+- To make all migrations run `npm run migrate:make`
+- To rollback last migration run `npm run migrate:rollback`
+- To create a new migration run `npm run migrate:create <migration-name>`

@@ -16,6 +16,6 @@ const pool = new Pool({
 });
 
 client
-  .raw('SELECT 1')
+  .raw('SELECT * from daily_quotes')
   .then((res) => logger.debug('db test query', res))
   .catch((err) => logger.error('db test query failed', err));
