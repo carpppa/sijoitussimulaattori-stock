@@ -55,13 +55,11 @@ interface AvDailySeries {
   };
 }
 
-const ALPHA_VANTAGE_URL = 'https://www.dev-alphavantage.co';
-
 const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
   try {
     return (await axios({
       method: 'get',
-      url: `${ALPHA_VANTAGE_URL}/query`,
+      url: `${config.app.ALPHA_VANTAGE_URL}/query`,
       params: { ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY },
     })) as AxiosResponse<T>;
   } catch (error) {
@@ -77,11 +75,12 @@ const getAvGlobalQuote = async (symbol: SupportedSymbols) => {
       symbol: symbol,
     };
 
-    // TODO
-    nock(ALPHA_VANTAGE_URL)
-      .get('/query')
-      .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
-      .reply(200, avGlobalQuote);
+    if (config.app.NODE_ENV !== 'production') {
+      nock(config.app.ALPHA_VANTAGE_URL)
+        .get('/query')
+        .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
+        .reply(200, avGlobalQuote);
+    }
 
     const quoteResponse = await makeAvRequest<AvGlobalQuote>(queryParams);
     logger.debug('test query', {
@@ -107,11 +106,12 @@ const getAvDailySeries = async (
       outputsize: outputSize,
     };
 
-    // TODO
-    nock(ALPHA_VANTAGE_URL)
-      .get('/query')
-      .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
-      .reply(200, avDailySeriesCompact);
+    if (config.app.NODE_ENV !== 'production') {
+      nock(config.app.ALPHA_VANTAGE_URL)
+        .get('/query')
+        .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
+        .reply(200, avDailySeriesCompact);
+    }
 
     const dailySeries = await makeAvRequest<AvDailySeries>(queryParams);
     // TODO

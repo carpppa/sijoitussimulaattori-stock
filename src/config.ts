@@ -11,6 +11,10 @@ const config = {
   app: {
     NODE_ENV: process.env.NODE_ENV || '',
     LOGGER_LEVEL: process.env.LOG_LEVEL || 'info',
+    ALPHA_VANTAGE_URL:
+      (process.env.NODE_ENV === 'production' &&
+        process.env.ALPHA_VANTAGE_URL) ||
+      'https://www.dev-alphavantage.co',
     ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY || '',
   },
   db: {
