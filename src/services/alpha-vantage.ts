@@ -15,7 +15,7 @@ type ShortTimestamp = string; // YYYY-MM-DD
 type LongTimestamp = string; // YYYY-MM-DD HH:MM:SS
 
 interface AvGlobalQuote {
-  'Global quote': {
+  'Global Quote': {
     '01. symbol': SupportedSymbols;
     '02. open': number;
     '03. high': number;
@@ -30,13 +30,11 @@ interface AvGlobalQuote {
 }
 
 interface AvDailyQuote {
-  [timestamp: string]: {
-    '1. open': number;
-    '2. high': number;
-    '3. low': number;
-    '4. close': number;
-    '5. volume': number;
-  };
+  '1. open': number;
+  '2. high': number;
+  '3. low': number;
+  '4. close': number;
+  '5. volume': number;
 }
 
 interface AvDailySeries {
@@ -47,7 +45,9 @@ interface AvDailySeries {
     '4. Output Size': 'Compact' | 'Full size';
     '5. Time Zone': string;
   };
-  'Time Series (Daily)': AvDailyQuote[];
+  'Time Series (Daily)': {
+    [timestamp: string]: AvDailyQuote;
+  };
 }
 
 const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
@@ -99,4 +99,4 @@ const getAvDailySeries = async (
   }
 };
 
-export { getAvGlobalQuote, getAvDailySeries };
+export { AvGlobalQuote, AvDailySeries, getAvGlobalQuote, getAvDailySeries };
