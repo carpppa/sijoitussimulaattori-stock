@@ -6,6 +6,8 @@ import { NextFunction, Request, Response } from 'express';
 import { Routes } from './routes';
 import client from './db';
 import * as Knex from 'knex';
+import { format, transports } from 'winston';
+import * as expressWinston from 'express-winston';
 import logger from './util/logger';
 
 interface JoiExpressError extends Error {
@@ -34,6 +36,8 @@ class App {
 
     // Boom HTTP errors
     this.app.use(boom());
+
+    this.app.use(expressWinston.logger(logger));
   }
 
   private config(): void {
