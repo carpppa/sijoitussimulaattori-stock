@@ -22,24 +22,24 @@ type LongTimestamp = string; // YYYY-MM-DD HH:MM:SS
 interface AvGlobalQuote {
   'Global Quote': {
     '01. symbol': SupportedSymbols;
-    '02. open': number;
-    '03. high': number;
-    '04. low': number;
-    '05. price': number;
-    '06. volume': number;
+    '02. open': string;
+    '03. high': string;
+    '04. low': string;
+    '05. price': string;
+    '06. volume': string;
     '07. latest trading day': ShortTimestamp;
-    '08. previous close': number;
-    '09. change': number;
+    '08. previous close': string;
+    '09. change': string;
     '10. change percent': string;
   };
 }
 
 interface AvDailyQuote {
-  '1. open': number;
-  '2. high': number;
-  '3. low': number;
-  '4. close': number;
-  '5. volume': number;
+  '1. open': string;
+  '2. high': string;
+  '3. low': string;
+  '4. close': string;
+  '5. volume': string;
 }
 
 interface AvDailySeries {
