@@ -3,6 +3,7 @@ import * as express from 'express';
 import * as validation from 'express-joi-validation';
 
 import { helloName } from './validation';
+import { getAvDailySeries, getAvGlobalQuote } from './services/alpha-vantage';
 
 export class Routes {
   private validator = validation({ passError: true });
@@ -21,5 +22,14 @@ export class Routes {
           message: `Hello, ${req.body.name.first}!`,
         });
       });
+
+    app.route('/stock').get(async (req: Request, res: Response) => {
+      try {
+        const quote = await getAvGlobalQuote('AAPL');
+        res.json(quote);
+      } catch (error) {
+        res.boom.badImplementation();
+      }
+    });
   }
 }

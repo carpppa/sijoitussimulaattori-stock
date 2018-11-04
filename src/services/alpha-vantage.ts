@@ -1,6 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
 import config from '../config';
 import logger from '../util/logger';
+import * as nock from 'nock';
+import {
+  avGlobalQuote,
+  avDailySeriesCompact,
+} from './__tests__/alpha-vantage-mock-data';
 
 type SupportedSymbols = 'AAPL' | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
 type AvQueryOutputSize = 'compact' | 'full';
@@ -50,11 +55,13 @@ interface AvDailySeries {
   };
 }
 
+const ALPHA_VANTAGE_URL = 'https://www.dev-alphavantage.co';
+
 const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
   try {
     return (await axios({
       method: 'get',
-      url: 'https://www.alphavantage.co/query',
+      url: `${ALPHA_VANTAGE_URL}/query`,
       params: { ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY },
     })) as AxiosResponse<T>;
   } catch (error) {
@@ -65,10 +72,18 @@ const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
 
 const getAvGlobalQuote = async (symbol: SupportedSymbols) => {
   try {
-    const quoteResponse = await makeAvRequest<AvGlobalQuote>({
+    const queryParams: AvRequestQueryParams = {
       function: 'GLOBAL_QUOTE',
       symbol: symbol,
-    });
+    };
+
+    // TODO
+    nock(ALPHA_VANTAGE_URL)
+      .get('/query')
+      .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
+      .reply(200, avGlobalQuote);
+
+    const quoteResponse = await makeAvRequest<AvGlobalQuote>(queryParams);
     logger.debug('test query', {
       status: quoteResponse.status,
       statusText: quoteResponse.statusText,
@@ -86,11 +101,19 @@ const getAvDailySeries = async (
   outputSize: AvQueryOutputSize = 'compact'
 ) => {
   try {
-    const dailySeries = await makeAvRequest<AvDailySeries>({
+    const queryParams: AvRequestQueryParams = {
       function: 'TIME_SERIES_DAILY',
       symbol: symbol,
       outputsize: outputSize,
-    });
+    };
+
+    // TODO
+    nock(ALPHA_VANTAGE_URL)
+      .get('/query')
+      .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
+      .reply(200, avDailySeriesCompact);
+
+    const dailySeries = await makeAvRequest<AvDailySeries>(queryParams);
     // TODO
     return dailySeries.data;
   } catch (error) {
