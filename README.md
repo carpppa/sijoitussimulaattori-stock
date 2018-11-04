@@ -2,6 +2,16 @@
 
 # sijoitussimulaattori-stock
 
+## Getting started
+
+Prerequisities:
+
+- Node (v10 or higher)
+- npm (v6 or higher)
+- Docker
+
+Clone the project and run `npm install` and `npm run build-ts`.
+
 ## Project setup instructions for vscode (recommended)
 
 Install the following plugins:
@@ -24,8 +34,9 @@ Install the following plugins:
 
 ## Running the project
 
-- Clean project: run `npm run build-ts`
-- Development: run `npm run start:dev`
+- Development:
+  - run `docker-compose up db`
+  - run `npm run start:dev` in another console
 
 ## Running tests
 
