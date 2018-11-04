@@ -11,10 +11,6 @@ const client = Knex(db_connection_config);
 
 export default client;
 
-const pool = new Pool({
-  connectionString: config.db.CONNECTION_STRING,
-});
-
 client
   .raw('SELECT * from daily_quotes')
   .then((res) => logger.debug('db test query', res))
