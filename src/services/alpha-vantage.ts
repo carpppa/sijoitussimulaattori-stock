@@ -1,11 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
+import * as nock from 'nock';
+
 import config from '../config';
 import logger from '../util/logger';
-import * as nock from 'nock';
-import {
-  avGlobalQuote,
-  avDailySeriesCompact,
-} from './__tests__/alpha-vantage-mock-data';
+import { avDailySeriesCompact, avGlobalQuote } from './__tests__/alpha-vantage-mock-data';
 
 type SupportedSymbols = 'AAPL' | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
 type AvQueryOutputSize = 'compact' | 'full';
@@ -83,14 +81,11 @@ const getAvGlobalQuote = async (symbol: SupportedSymbols) => {
     }
 
     const quoteResponse = await makeAvRequest<AvGlobalQuote>(queryParams);
-    logger.debug('test query', {
-      status: quoteResponse.status,
-      statusText: quoteResponse.statusText,
-      data: quoteResponse.data,
-    });
+
     return quoteResponse.data;
   } catch (error) {
     // TODO: prettify error here?
+    logger.error('Stock global quote request fail', error);
     throw error;
   }
 };
@@ -118,6 +113,7 @@ const getAvDailySeries = async (
     return dailySeries.data;
   } catch (error) {
     // TODO
+    logger.error('Stock daily series request fail', error);
     throw error;
   }
 };
