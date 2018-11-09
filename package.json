@@ -14,7 +14,8 @@
     "heroku-postbuild": "bash ./tools/build.sh",
     "migrate:create": "env-cmd .env knex migrate:make",
     "migrate:make": "env-cmd .env knex migrate:latest",
-    "migrate:rollback": "env-cmd .env knex migrate:rollback"
+    "migrate:rollback": "env-cmd .env knex migrate:rollback",
+    "populate-db:dev": "env-cmd .env node bin/update-stocks"
   },
   "jest": {
     "moduleFileExtensions": [

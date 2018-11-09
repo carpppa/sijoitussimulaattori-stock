@@ -1,6 +1,4 @@
-import { AvGlobalQuote, AvDailySeries } from '../alpha-vantage';
-
-export const avGlobalQuote: AvGlobalQuote = {
+export const avGlobalQuote = {
   'Global Quote': {
     '01. symbol': 'AAPL',
     '02. open': '209.5500',
@@ -15,7 +13,7 @@ export const avGlobalQuote: AvGlobalQuote = {
   },
 };
 
-export const avDailySeriesCompact: AvDailySeries = {
+export const avDailySeriesCompact = {
   'Meta Data': {
     '1. Information': 'Daily Prices (open, high, low, close) and Volumes',
     '2. Symbol': 'AAPL',

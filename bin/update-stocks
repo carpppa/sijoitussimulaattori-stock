@@ -1,0 +1,14 @@
+#! /app/bin/node
+
+const { populateDb } = require('../dist/src/services/db');
+const { logger } = require('../dist/src/util/logger');
+
+populateDb()
+  .then(() => {
+    logger.info('database updated successfully');
+    process.exit();
+  })
+  .catch((error) => {
+    logger.error('database update failed');
+    process.exit();
+  });

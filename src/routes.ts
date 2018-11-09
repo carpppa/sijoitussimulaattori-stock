@@ -1,9 +1,17 @@
 import { Request, Response } from 'express';
 import * as express from 'express';
 import * as validation from 'express-joi-validation';
+import * as Joi from 'joi';
 
-import { helloName } from './validation';
-import { getAvDailySeries, getAvGlobalQuote } from './services/alpha-vantage';
+import { getDailySeries } from './services/db';
+import { logger } from './util/logger';
+import {
+  equitySymbol,
+  helloName,
+  dailyQuotes,
+  JoiValidateResponse,
+} from './validation';
+import { join } from 'path';
 
 export class Routes {
   private validator = validation({ passError: true });
@@ -23,13 +31,20 @@ export class Routes {
         });
       });
 
-    app.route('/stock').get(async (req: Request, res: Response) => {
-      try {
-        const quote = await getAvGlobalQuote('AAPL');
-        res.json(quote);
-      } catch (error) {
-        res.boom.badImplementation();
-      }
-    });
+    app
+      .route('/stock/:symbol')
+      .get(
+        this.validator.params(equitySymbol),
+        async (req: Request, res: Response) => {
+          try {
+            const quotes = await getDailySeries(req.params.symbol);
+
+            Joi.assert(quotes, dailyQuotes);
+            res.json(quotes);
+          } catch (error) {
+            res.boom.badImplementation();
+          }
+        }
+      );
   }
 }

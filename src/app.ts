@@ -4,11 +4,10 @@ import * as Joi from 'joi';
 import * as boom from 'express-boom';
 import { NextFunction, Request, Response } from 'express';
 import { Routes } from './routes';
-import client from './db';
+import { client } from './db';
 import * as Knex from 'knex';
-import { format, transports } from 'winston';
 import * as expressWinston from 'express-winston';
-import logger from './util/logger';
+import { logger } from './util/logger';
 
 interface JoiExpressError extends Error {
   error: Joi.ValidationError;

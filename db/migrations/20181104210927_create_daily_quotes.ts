@@ -10,6 +10,7 @@ exports.up = function(knex: Knex): Knex.SchemaBuilder {
     t.float('high').notNullable();
     t.float('low').notNullable();
     t.float('close').notNullable();
+    t.bigInteger('volume').notNullable();
   });
 };
 

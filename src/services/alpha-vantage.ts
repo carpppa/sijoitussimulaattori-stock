@@ -2,15 +2,15 @@ import axios, { AxiosResponse } from 'axios';
 import * as nock from 'nock';
 
 import config from '../config';
-import logger from '../util/logger';
+import { logger } from '../util/logger';
 import { avDailySeriesCompact, avGlobalQuote } from './__tests__/alpha-vantage-mock-data';
 
-type SupportedSymbols = 'AAPL' | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
+type EquitySymbol = 'AAPL' | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
 type AvQueryOutputSize = 'compact' | 'full';
 
 interface AvRequestQueryParams {
   function: 'TIME_SERIES_DAILY' | 'GLOBAL_QUOTE';
-  symbol?: SupportedSymbols;
+  symbol?: EquitySymbol;
   outputsize?: AvQueryOutputSize;
 }
 
@@ -19,7 +19,7 @@ type LongTimestamp = string; // YYYY-MM-DD HH:MM:SS
 
 interface AvGlobalQuote {
   'Global Quote': {
-    '01. symbol': SupportedSymbols;
+    '01. symbol': EquitySymbol;
     '02. open': string;
     '03. high': string;
     '04. low': string;
@@ -43,7 +43,7 @@ interface AvDailyQuote {
 interface AvDailySeries {
   'Meta Data': {
     '1. Information': string;
-    '2. Symbol': SupportedSymbols;
+    '2. Symbol': EquitySymbol;
     '3. Last Refreshed': ShortTimestamp;
     '4. Output Size': 'Compact' | 'Full size';
     '5. Time Zone': string;
@@ -51,6 +51,16 @@ interface AvDailySeries {
   'Time Series (Daily)': {
     [timestamp: string]: AvDailyQuote;
   };
+}
+
+interface DailyQuote {
+  symbol: string;
+  date: Date;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
 }
 
 const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
@@ -66,7 +76,7 @@ const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
   }
 };
 
-const getAvGlobalQuote = async (symbol: SupportedSymbols) => {
+const getAvGlobalQuote = async (symbol: EquitySymbol) => {
   try {
     const queryParams: AvRequestQueryParams = {
       function: 'GLOBAL_QUOTE',
@@ -91,7 +101,7 @@ const getAvGlobalQuote = async (symbol: SupportedSymbols) => {
 };
 
 const getAvDailySeries = async (
-  symbol: SupportedSymbols,
+  symbol: EquitySymbol,
   outputSize: AvQueryOutputSize = 'compact'
 ) => {
   try {
@@ -108,9 +118,27 @@ const getAvDailySeries = async (
         .reply(200, avDailySeriesCompact);
     }
 
-    const dailySeries = await makeAvRequest<AvDailySeries>(queryParams);
-    // TODO
-    return dailySeries.data;
+    const avDailySeries = await makeAvRequest<AvDailySeries>(queryParams);
+
+    const avTimeSeries = Object.values(
+      avDailySeries.data['Time Series (Daily)']
+    );
+    const dailySeries = Object.keys(
+      avDailySeries.data['Time Series (Daily)']
+    ).map(
+      (key, index) =>
+        ({
+          symbol: symbol,
+          date: new Date(key),
+          open: Number.parseFloat(avTimeSeries[index]['1. open']),
+          high: Number.parseFloat(avTimeSeries[index]['2. high']),
+          low: Number.parseFloat(avTimeSeries[index]['3. low']),
+          close: Number.parseFloat(avTimeSeries[index]['4. close']),
+          volume: Number.parseInt(avTimeSeries[index]['5. volume']),
+        } as DailyQuote)
+    );
+
+    return dailySeries;
   } catch (error) {
     // TODO
     logger.error('Stock daily series request fail', error);
@@ -118,4 +146,4 @@ const getAvDailySeries = async (
   }
 };
 
-export { AvGlobalQuote, AvDailySeries, getAvGlobalQuote, getAvDailySeries };
+export { EquitySymbol, DailyQuote, getAvGlobalQuote, getAvDailySeries };
