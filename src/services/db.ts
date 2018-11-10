@@ -69,14 +69,11 @@ const populateDb = async () => {
     );
 
     const insertedSymbols: (SymbolName | undefined)[] = await Promise.all(
-      newSymbols.map(async (symbol) => {
-        try {
-          await insertNewSymbol(symbol);
-          return symbol;
-        } catch (error) {
-          return undefined;
-        }
-      })
+      newSymbols.map(async (symbol) =>
+        insertNewSymbol(symbol)
+          .then(() => symbol)
+          .catch(() => undefined)
+      )
     );
 
     const symbolsSeriesData: (DailyQuote[] | undefined)[] = await Promise.all(
@@ -110,6 +107,7 @@ const populateDb = async () => {
                   )
                 );
           } catch (error) {
+            logger.error('cleaning series', error);
             return undefined;
           }
         })
