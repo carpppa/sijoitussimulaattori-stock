@@ -5,12 +5,7 @@ import * as Joi from 'joi';
 
 import { getDailySeries } from './services/db';
 import { logger } from './util/logger';
-import {
-  equitySymbol,
-  helloName,
-  dailyQuotes,
-  JoiValidateResponse,
-} from './validation';
+import { equitySymbol, helloName, dailyQuotes } from './validation';
 import { join } from 'path';
 
 export class Routes {

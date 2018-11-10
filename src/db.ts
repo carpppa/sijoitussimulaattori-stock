@@ -9,6 +9,16 @@ const enum DatabaseTables {
   DailyQuotes = 'daily_quotes',
 }
 
+const enum DailyQuotesTable {
+  Symbol = 'symbol',
+  Date = 'date',
+  Open = 'open',
+  High = 'high',
+  Low = 'low',
+  Close = 'close',
+  Volume = 'colume',
+}
+
 const client = Knex(db_connection_config);
 
 client
@@ -17,4 +27,4 @@ client
   .then((res) => logger.debug('db test query', res))
   .catch((err) => logger.error('db test query failed', err));
 
-export { DatabaseTables, client };
+export { DatabaseTables, DailyQuotesTable, client };
