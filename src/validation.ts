@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+import { SUPPORTED_SYMBOLS } from './services/alpha-vantage';
 
 const helloName = Joi.object({
   name: Joi.object({
@@ -7,10 +8,9 @@ const helloName = Joi.object({
   }).required(),
 });
 
-// TODO figure a better system for supported symbols
 const equitySymbol = Joi.object({
   symbol: Joi.string()
-    .valid('AAPL')
+    .valid(SUPPORTED_SYMBOLS)
     .required(),
 });
 

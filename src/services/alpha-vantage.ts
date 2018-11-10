@@ -3,9 +3,13 @@ import * as nock from 'nock';
 
 import config from '../config';
 import { logger } from '../util/logger';
-import { avDailySeriesCompact, avGlobalQuote } from './__tests__/alpha-vantage-mock-data';
+import {
+  avDailySeriesCompact,
+  avGlobalQuote,
+} from './__tests__/alpha-vantage-mock-data';
 
-type EquitySymbol = 'AAPL' | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
+type EquitySymbol = 'AAPL'; // | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
+const SUPPORTED_SYMBOLS: EquitySymbol[] = ['AAPL']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
 type AvQueryOutputSize = 'compact' | 'full';
 
 interface AvRequestQueryParams {
@@ -94,7 +98,6 @@ const getAvGlobalQuote = async (symbol: EquitySymbol) => {
 
     return quoteResponse.data;
   } catch (error) {
-    // TODO: prettify error here?
     logger.error('Stock global quote request fail', error);
     throw error;
   }
@@ -140,10 +143,15 @@ const getAvDailySeries = async (
 
     return dailySeries;
   } catch (error) {
-    // TODO
     logger.error('Stock daily series request fail', error);
     throw error;
   }
 };
 
-export { EquitySymbol, DailyQuote, getAvGlobalQuote, getAvDailySeries };
+export {
+  EquitySymbol,
+  SUPPORTED_SYMBOLS,
+  DailyQuote,
+  getAvGlobalQuote,
+  getAvDailySeries,
+};

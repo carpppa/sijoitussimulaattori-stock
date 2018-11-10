@@ -1,6 +1,11 @@
 import { client, DatabaseTables, DailyQuotesTable } from '../db';
 import { logger } from '../util/logger';
-import { DailyQuote, EquitySymbol, getAvDailySeries } from './alpha-vantage';
+import {
+  DailyQuote,
+  EquitySymbol,
+  getAvDailySeries,
+  SUPPORTED_SYMBOLS,
+} from './alpha-vantage';
 import { isUndefined } from 'util';
 
 const getDailySeries = async (symbol: string) => {
@@ -31,13 +36,11 @@ const getLatestDailySeriesEntry = async (symbol: string) => {
 };
 
 const populateDb = async () => {
-  // TODO: fetch these from the database:
-  const symbols: EquitySymbol[] = ['AAPL']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
   const newSymbols: EquitySymbol[] = [];
 
   try {
     const symbolsSeriesData: (DailyQuote[] | undefined)[] = await Promise.all(
-      symbols.map((symbol) =>
+      SUPPORTED_SYMBOLS.map((symbol) =>
         getAvDailySeries(
           symbol,
           newSymbols.includes(symbol) ? 'full' : 'compact'
