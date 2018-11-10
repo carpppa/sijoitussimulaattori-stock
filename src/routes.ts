@@ -4,9 +4,7 @@ import * as validation from 'express-joi-validation';
 import * as Joi from 'joi';
 
 import { getDailySeries } from './services/db';
-import { logger } from './util/logger';
 import { equitySymbol, helloName, dailyQuotes } from './validation';
-import { join } from 'path';
 
 export class Routes {
   private validator = validation({ passError: true });

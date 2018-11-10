@@ -7,6 +7,7 @@ logger.debug('database connection', db_connection_config);
 
 const enum DatabaseTables {
   DailyQuotes = 'daily_quotes',
+  Symbols = 'symbols',
 }
 
 const enum DailyQuotesTable {
@@ -19,12 +20,23 @@ const enum DailyQuotesTable {
   Volume = 'colume',
 }
 
+const enum SymbolsTable {
+  Symbol = 'symbol',
+  Name = 'name',
+  Type = 'type',
+  Region = 'region',
+  MarketOpen = 'marketOpen',
+  MarketClose = 'marketClose',
+  TimeZone = 'timeZone',
+  Currency = 'currency',
+}
+
 const client = Knex(db_connection_config);
 
 client
   .first()
-  .from(DatabaseTables.DailyQuotes)
+  .from(DatabaseTables.Symbols)
   .then((res) => logger.debug('db test query', res))
   .catch((err) => logger.error('db test query failed', err));
 
-export { DatabaseTables, DailyQuotesTable, client };
+export { DatabaseTables, DailyQuotesTable, SymbolsTable, client };

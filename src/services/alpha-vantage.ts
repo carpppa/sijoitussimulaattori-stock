@@ -6,16 +6,19 @@ import { logger } from '../util/logger';
 import {
   avDailySeriesCompact,
   avGlobalQuote,
+  avSymbolSearch,
 } from './__tests__/alpha-vantage-mock-data';
+import { isUndefined } from 'util';
 
-type EquitySymbol = 'AAPL'; // | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
-const SUPPORTED_SYMBOLS: EquitySymbol[] = ['AAPL']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
+type SymbolName = 'AAPL'; // | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
+const SUPPORTED_SYMBOLS: SymbolName[] = ['AAPL']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
 type AvQueryOutputSize = 'compact' | 'full';
 
 interface AvRequestQueryParams {
-  function: 'TIME_SERIES_DAILY' | 'GLOBAL_QUOTE';
-  symbol?: EquitySymbol;
+  function: 'TIME_SERIES_DAILY' | 'GLOBAL_QUOTE' | 'SYMBOL_SEARCH';
+  symbol?: SymbolName;
   outputsize?: AvQueryOutputSize;
+  keywords?: SymbolName;
 }
 
 type ShortTimestamp = string; // YYYY-MM-DD
@@ -23,7 +26,7 @@ type LongTimestamp = string; // YYYY-MM-DD HH:MM:SS
 
 interface AvGlobalQuote {
   'Global Quote': {
-    '01. symbol': EquitySymbol;
+    '01. symbol': SymbolName;
     '02. open': string;
     '03. high': string;
     '04. low': string;
@@ -47,7 +50,7 @@ interface AvDailyQuote {
 interface AvDailySeries {
   'Meta Data': {
     '1. Information': string;
-    '2. Symbol': EquitySymbol;
+    '2. Symbol': SymbolName;
     '3. Last Refreshed': ShortTimestamp;
     '4. Output Size': 'Compact' | 'Full size';
     '5. Time Zone': string;
@@ -57,14 +60,41 @@ interface AvDailySeries {
   };
 }
 
+interface AvSymbolMetaData {
+  '1. symbol': string;
+  '2. name': string;
+  '3. type': string;
+  '4. region': string;
+  '5. marketOpen': string;
+  '6. marketClose': string;
+  '7. timezone': string;
+  '8. currency': string;
+  '9. matchScore': string;
+}
+
+interface AvSymbolSearch {
+  bestMatches: AvSymbolMetaData[];
+}
+
 interface DailyQuote {
-  symbol: string;
+  symbol: SymbolName;
   date: Date;
   open: number;
   high: number;
   low: number;
   close: number;
   volume: number;
+}
+
+interface Symbol {
+  symbol: SymbolName;
+  name: string;
+  type: string;
+  region: string;
+  marketOpen: string;
+  marketClose: string;
+  timeZone: string;
+  currency: string;
 }
 
 const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
@@ -80,7 +110,7 @@ const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
   }
 };
 
-const getAvGlobalQuote = async (symbol: EquitySymbol) => {
+const getAvGlobalQuote = async (symbol: SymbolName) => {
   try {
     const queryParams: AvRequestQueryParams = {
       function: 'GLOBAL_QUOTE',
@@ -98,13 +128,13 @@ const getAvGlobalQuote = async (symbol: EquitySymbol) => {
 
     return quoteResponse.data;
   } catch (error) {
-    logger.error('Stock global quote request fail', error);
+    logger.error('stock global quote request fail', error);
     throw error;
   }
 };
 
 const getAvDailySeries = async (
-  symbol: EquitySymbol,
+  symbol: SymbolName,
   outputSize: AvQueryOutputSize = 'compact'
 ) => {
   try {
@@ -143,15 +173,60 @@ const getAvDailySeries = async (
 
     return dailySeries;
   } catch (error) {
-    logger.error('Stock daily series request fail', error);
+    logger.error('stock daily series request fail', error);
+    throw error;
+  }
+};
+
+const getAvSymbolMetaData = async (symbol: SymbolName) => {
+  try {
+    const queryParams: AvRequestQueryParams = {
+      function: 'SYMBOL_SEARCH',
+      keywords: symbol,
+    };
+
+    if (config.app.NODE_ENV !== 'production') {
+      nock(config.app.ALPHA_VANTAGE_URL)
+        .get('/query')
+        .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
+        .reply(200, avSymbolSearch);
+    }
+
+    const avSymbolSearchResults = await makeAvRequest<AvSymbolSearch>(
+      queryParams
+    );
+
+    const avSymbolMetaData:
+      | AvSymbolMetaData
+      | undefined = avSymbolSearchResults.data.bestMatches.find(
+      (symbolMetaData) => symbolMetaData['1. symbol'] === symbol
+    );
+    if (isUndefined(avSymbolMetaData)) {
+      throw Error(`symbol "${symbol}" not found`);
+    }
+
+    return {
+      symbol: symbol,
+      name: avSymbolMetaData['2. name'],
+      type: avSymbolMetaData['3. type'],
+      region: avSymbolMetaData['4. region'],
+      marketOpen: avSymbolMetaData['5. marketOpen'],
+      marketClose: avSymbolMetaData['6. marketClose'],
+      timeZone: avSymbolMetaData['7. timezone'],
+      currency: avSymbolMetaData['8. currency'],
+    } as Symbol;
+  } catch (error) {
+    logger.error('equity meta data request fail', error);
     throw error;
   }
 };
 
 export {
-  EquitySymbol,
+  SymbolName,
   SUPPORTED_SYMBOLS,
   DailyQuote,
+  Symbol,
   getAvGlobalQuote,
   getAvDailySeries,
+  getAvSymbolMetaData,
 };
