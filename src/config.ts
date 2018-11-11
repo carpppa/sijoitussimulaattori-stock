@@ -14,7 +14,7 @@ const config = {
     ALPHA_VANTAGE_URL:
       (process.env.NODE_ENV === 'production' &&
         process.env.ALPHA_VANTAGE_URL) ||
-      'https://www.dev-alphavantage.co',
+      'http://127.0.0.1:8888',
     ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY || '',
   },
   db: {

@@ -36,6 +36,7 @@ Install the following plugins:
 
 - Development:
   - run `docker-compose up db`
+  - see section **Database** on how to setup the database
   - run `npm run start:dev` in another console
 
 ## Running tests
@@ -47,3 +48,7 @@ Install the following plugins:
 - To make all migrations run `npm run migrate:make`
 - To rollback last migration run `npm run migrate:rollback`
 - To create a new migration run `npm run migrate:create <migration-name>`
+- To populate the database:
+  - `npm run start:av-dev-server`: starts the development server serving Alpha Vantage data
+    - On the first time, you must go to the development server folder and run `npm install`
+  - `npm run populate-db:dev`: populates the database

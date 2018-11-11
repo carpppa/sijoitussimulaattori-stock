@@ -1,13 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
-import * as nock from 'nock';
-
 import config from '../config';
 import { logger } from '../util/logger';
-import {
-  avDailySeriesCompact,
-  avGlobalQuote,
-  avSymbolSearch,
-} from './__tests__/alpha-vantage-mock-data';
+
 import { isUndefined } from 'util';
 import { PromiseQueue } from '../util/promise-queue';
 
@@ -125,13 +119,6 @@ const getAvGlobalQuote = async (symbol: SymbolName) => {
       symbol: symbol,
     };
 
-    if (config.app.NODE_ENV !== 'production') {
-      nock(config.app.ALPHA_VANTAGE_URL)
-        .get('/query')
-        .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
-        .reply(200, avGlobalQuote);
-    }
-
     const quoteResponse = await makeAvRequest<AvGlobalQuote>(queryParams);
 
     return quoteResponse.data;
@@ -151,13 +138,6 @@ const getAvDailySeries = async (
       symbol: symbol,
       outputsize: outputSize,
     };
-
-    if (config.app.NODE_ENV !== 'production') {
-      nock(config.app.ALPHA_VANTAGE_URL)
-        .get('/query')
-        .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
-        .reply(200, avDailySeriesCompact);
-    }
 
     const avDailySeries = await makeAvRequest<AvDailySeries>(queryParams);
 
@@ -192,13 +172,6 @@ const getAvSymbolMetaData = async (symbol: SymbolName) => {
       function: 'SYMBOL_SEARCH',
       keywords: symbol,
     };
-
-    if (config.app.NODE_ENV !== 'production') {
-      nock(config.app.ALPHA_VANTAGE_URL)
-        .get('/query')
-        .query({ ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY })
-        .reply(200, avSymbolSearch);
-    }
 
     const avSymbolSearchResults = await makeAvRequest<AvSymbolSearch>(
       queryParams
