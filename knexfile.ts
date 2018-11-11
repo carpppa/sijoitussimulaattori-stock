@@ -1,5 +1,8 @@
 import config from './src/config';
+import * as pg from 'pg';
 import 'knex';
+
+pg.defaults.ssl = config.app.NODE_ENV === 'production';
 
 export = {
   client: 'pg',
