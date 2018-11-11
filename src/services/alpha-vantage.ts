@@ -9,6 +9,12 @@ import {
   avSymbolSearch,
 } from './__tests__/alpha-vantage-mock-data';
 import { isUndefined } from 'util';
+import { PromiseQueue } from '../util/promise-queue';
+
+const ALPHA_VANTAGE_MINIMUM_REQUEST_INTERVAL = 15000; // ms
+const promiseQueue = new PromiseQueue({
+  interval: ALPHA_VANTAGE_MINIMUM_REQUEST_INTERVAL,
+});
 
 type SymbolName = 'AAPL'; // | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
 const SUPPORTED_SYMBOLS: SymbolName[] = ['AAPL']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
@@ -99,11 +105,13 @@ interface Symbol {
 
 const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
   try {
-    return (await axios({
-      method: 'get',
-      url: `${config.app.ALPHA_VANTAGE_URL}/query`,
-      params: { ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY },
-    })) as AxiosResponse<T>;
+    return (await promiseQueue.enqueue(() =>
+      axios({
+        method: 'get',
+        url: `${config.app.ALPHA_VANTAGE_URL}/query`,
+        params: { ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY },
+      })
+    )) as AxiosResponse<T>;
   } catch (error) {
     logger.debug('Alpha Vantage request failed', error);
     throw error;
