@@ -1,4 +1,4 @@
-#! /app/bin/node
+#!/usr/bin/env node
 
 const { populateDb } = require('../dist/src/services/db');
 const { logger } = require('../dist/src/util/logger');
