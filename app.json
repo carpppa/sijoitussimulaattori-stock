@@ -1,0 +1,29 @@
+{
+  "name": "Sijoitussimulaattori Stock",
+  "description": "",
+  "scripts": {
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "LOG_LEVEL": "info",
+    "ALPHA_VANTAGE_URL": {
+      "required": true
+    },
+    "ALPHA_VANTAGE_API_KEY": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
