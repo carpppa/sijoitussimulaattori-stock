@@ -12,7 +12,10 @@ const ensureNecessaryEnvs = (mandatoryEnvs: string[]): void => {
   );
 };
 
-const randomInt = (low: number = 0, high: number = Number.MAX_SAFE_INTEGER) => {
+const randomInt = (
+  low: number = 0,
+  high: number = Number.MAX_SAFE_INTEGER
+): number => {
   return Math.floor(Math.random() * (high - low) + low);
 };
 

@@ -1,42 +1,23 @@
 import axios, { AxiosResponse } from 'axios';
+import { isUndefined } from 'util';
+
 import config from '../config';
 import { logger } from '../util/logger';
-
-import { isUndefined } from 'util';
 import { PromiseQueue } from '../util/promise-queue';
+import { DailyQuote, Symbol, SymbolName } from './stock-data-types';
 
 const ALPHA_VANTAGE_MINIMUM_REQUEST_INTERVAL = 15000; // ms
 const promiseQueue = new PromiseQueue({
   interval: ALPHA_VANTAGE_MINIMUM_REQUEST_INTERVAL,
 });
 
-type SymbolName = 'AAPL'; // | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
-const SUPPORTED_SYMBOLS: SymbolName[] = ['AAPL']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
 type AvQueryOutputSize = 'compact' | 'full';
 
 interface AvRequestQueryParams {
-  function: 'TIME_SERIES_DAILY' | 'GLOBAL_QUOTE' | 'SYMBOL_SEARCH';
+  function: 'TIME_SERIES_DAILY' | 'SYMBOL_SEARCH';
   symbol?: SymbolName;
   outputsize?: AvQueryOutputSize;
   keywords?: SymbolName;
-}
-
-type ShortTimestamp = string; // YYYY-MM-DD
-type LongTimestamp = string; // YYYY-MM-DD HH:MM:SS
-
-interface AvGlobalQuote {
-  'Global Quote': {
-    '01. symbol': SymbolName;
-    '02. open': string;
-    '03. high': string;
-    '04. low': string;
-    '05. price': string;
-    '06. volume': string;
-    '07. latest trading day': ShortTimestamp;
-    '08. previous close': string;
-    '09. change': string;
-    '10. change percent': string;
-  };
 }
 
 interface AvDailyQuote {
@@ -51,7 +32,7 @@ interface AvDailySeries {
   'Meta Data': {
     '1. Information': string;
     '2. Symbol': SymbolName;
-    '3. Last Refreshed': ShortTimestamp;
+    '3. Last Refreshed': string;
     '4. Output Size': 'Compact' | 'Full size';
     '5. Time Zone': string;
   };
@@ -76,54 +57,19 @@ interface AvSymbolSearch {
   bestMatches: AvSymbolMetaData[];
 }
 
-interface DailyQuote {
-  symbol: SymbolName;
-  date: Date;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
-
-interface Symbol {
-  symbol: SymbolName;
-  name: string;
-  type: string;
-  region: string;
-  marketOpen: string;
-  marketClose: string;
-  timeZone: string;
-  currency: string;
-}
-
-const makeAvRequest = async <T>(queryParams: AvRequestQueryParams) => {
+const makeAvRequest = async <T>(
+  queryParams: AvRequestQueryParams
+): Promise<AxiosResponse<T>> => {
   try {
-    return (await promiseQueue.enqueue(() =>
+    return await promiseQueue.enqueue<AxiosResponse<T>>(() =>
       axios({
         method: 'get',
         url: `${config.app.ALPHA_VANTAGE_URL}/query`,
         params: { ...queryParams, apikey: config.app.ALPHA_VANTAGE_API_KEY },
       })
-    )) as AxiosResponse<T>;
+    );
   } catch (error) {
     logger.debug('Alpha Vantage request failed', error);
-    throw error;
-  }
-};
-
-const getAvGlobalQuote = async (symbol: SymbolName) => {
-  try {
-    const queryParams: AvRequestQueryParams = {
-      function: 'GLOBAL_QUOTE',
-      symbol: symbol,
-    };
-
-    const quoteResponse = await makeAvRequest<AvGlobalQuote>(queryParams);
-
-    return quoteResponse.data;
-  } catch (error) {
-    logger.error('stock global quote request fail', error);
     throw error;
   }
 };
@@ -131,7 +77,7 @@ const getAvGlobalQuote = async (symbol: SymbolName) => {
 const getAvDailySeries = async (
   symbol: SymbolName,
   outputSize: AvQueryOutputSize = 'compact'
-) => {
+): Promise<DailyQuote[]> => {
   try {
     const queryParams: AvRequestQueryParams = {
       function: 'TIME_SERIES_DAILY',
@@ -166,7 +112,7 @@ const getAvDailySeries = async (
   }
 };
 
-const getAvSymbolMetaData = async (symbol: SymbolName) => {
+const getAvSymbolMetaData = async (symbol: SymbolName): Promise<Symbol> => {
   try {
     const queryParams: AvRequestQueryParams = {
       function: 'SYMBOL_SEARCH',
@@ -202,12 +148,4 @@ const getAvSymbolMetaData = async (symbol: SymbolName) => {
   }
 };
 
-export {
-  SymbolName,
-  SUPPORTED_SYMBOLS,
-  DailyQuote,
-  Symbol,
-  getAvGlobalQuote,
-  getAvDailySeries,
-  getAvSymbolMetaData,
-};
+export { getAvDailySeries, getAvSymbolMetaData };

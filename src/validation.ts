@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
-import { SUPPORTED_SYMBOLS } from './services/alpha-vantage';
+
+import { SUPPORTED_SYMBOLS } from './services/stock-data-types';
 
 const helloName = Joi.object({
   name: Joi.object({

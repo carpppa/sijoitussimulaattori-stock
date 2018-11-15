@@ -1,17 +1,11 @@
-import { client, DatabaseTables, DailyQuotesTable, SymbolsTable } from '../db';
-import { logger } from '../util/logger';
-import {
-  DailyQuote,
-  SymbolName,
-  getAvDailySeries,
-  SUPPORTED_SYMBOLS,
-  Symbol,
-  getAvSymbolMetaData,
-} from './alpha-vantage';
 import { isUndefined } from 'util';
-import { exist } from 'joi';
 
-const getDailySeries = async (symbol: string) => {
+import { client, DailyQuotesTable, DatabaseTables, SymbolsTable } from '../db';
+import { logger } from '../util/logger';
+import { getAvDailySeries, getAvSymbolMetaData } from './alpha-vantage';
+import { DailyQuote, SUPPORTED_SYMBOLS, Symbol, SymbolName } from './stock-data-types';
+
+const getDailySeries = async (symbol: SymbolName): Promise<DailyQuote[]> => {
   try {
     return (await client
       .select()
@@ -23,7 +17,7 @@ const getDailySeries = async (symbol: string) => {
   }
 };
 
-const getSymbolNames = async () => {
+const getSymbolNames = async (): Promise<Symbol[]> => {
   try {
     return (await client
       .select(SymbolsTable.Symbol)
@@ -34,7 +28,9 @@ const getSymbolNames = async () => {
   }
 };
 
-const getLatestDailySeriesEntry = async (symbol: string) => {
+const getLatestDailySeriesEntry = async (
+  symbol: SymbolName
+): Promise<DailyQuote> => {
   try {
     return (await client
       .first()
@@ -49,7 +45,11 @@ const getLatestDailySeriesEntry = async (symbol: string) => {
   }
 };
 
-const insertNewSymbol = async (symbol: SymbolName) => {
+/**
+ * Fetches meta data from Alpha Vantage for the given symbol and
+ * stores it into the database.
+ */
+const insertNewSymbol = async (symbol: SymbolName): Promise<void> => {
   const symbolData = await getAvSymbolMetaData(symbol);
   try {
     await client(DatabaseTables.Symbols).insert(symbolData);
@@ -59,7 +59,14 @@ const insertNewSymbol = async (symbol: SymbolName) => {
   }
 };
 
-const populateDb = async () => {
+/**
+ * Populates the database with the symbols listed in SUPPORTED_SYMBOLS.
+ * If the symbol didn't exist in the database before, fetches its meta
+ * data and stores it, and then fetches the available market history data.
+ * For symbols that already existed, updates only the new
+ * entries into the database.
+ */
+const populateDb = async (): Promise<void> => {
   try {
     const existingSymbols = (await getSymbolNames()).map(
       (equity) => equity.symbol as SymbolName

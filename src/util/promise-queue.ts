@@ -1,4 +1,5 @@
 import { isUndefined } from 'util';
+
 import { logger } from './logger';
 
 /** Configuration options for the promise queue */
@@ -28,7 +29,7 @@ export class PromiseQueue {
     this.interval = (options && options.interval) || 0;
   }
 
-  private async push(callback: Function) {
+  private async push(callback: Function): Promise<void> {
     this.queue.push(callback);
     if (this.autorun && !this.running) {
       this.dequeue();
@@ -41,11 +42,11 @@ export class PromiseQueue {
    * once it's executed.
    * @param fun Function to enqueue.
    */
-  async enqueue(fun: Function) {
-    return new Promise(async (resolve, reject) => {
+  async enqueue<T>(fun: Function): Promise<T> {
+    return new Promise<T>(async (resolve, reject) => {
       const resolver = async () => {
         try {
-          const ret = await fun();
+          const ret: T = await fun();
           resolve(ret);
         } catch (error) {
           reject(error);
@@ -60,7 +61,7 @@ export class PromiseQueue {
    * Start dequeuing. If option `autorun` is used, this function
    * does not need to be called manually.
    */
-  async dequeue() {
+  async dequeue(): Promise<void> {
     this.running = true;
     const func = this.queue.shift();
     if (func) {
