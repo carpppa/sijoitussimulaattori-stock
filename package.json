@@ -9,7 +9,7 @@
     "start:dev": "concurrently -n build-ts,serve --kill-others \"npm run watch-ts\" \"npm run watch-serve\"",
     "start:av-dev-server": "cd ./src/util/alpha-vantage-dev-server && npm start",
     "install:av-dev-server": "cd ./src/util/alpha-vantage-dev-server && npm ci",
-    "test": "jest",
+    "test": "env-cmd .env.test jest",
     "build-ts": "tsc",
     "watch-ts": "tsc -w",
     "watch-serve": "env-cmd .env nodemon -L --watch ./dist --exec \"node --inspect\" ./dist/index.js",
@@ -20,6 +20,9 @@
     "heroku-postbuild": "bash ./tools/build.sh"
   },
   "jest": {
+    "setupFiles": [
+      "<rootDir>/tools/test-setup.js"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -28,12 +31,14 @@
       "json",
       "node"
     ],
+    "moduleDirectories": [
+      "node_modules",
+      "./src/services/__tests__/util/data"
+    ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
-    "testMatch": [
-      "**/__tests__/*.+(ts|tsx|js)"
-    ]
+    "testRegex": "(/__tests__/.*(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
   },
   "repository": {
     "type": "git",

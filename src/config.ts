@@ -12,7 +12,7 @@ const config = {
     NODE_ENV: process.env.NODE_ENV || '',
     LOGGER_LEVEL: process.env.LOG_LEVEL || 'info',
     ALPHA_VANTAGE_URL:
-      (process.env.NODE_ENV === 'production' &&
+      (process.env.NODE_ENV !== 'development' &&
         process.env.ALPHA_VANTAGE_URL) ||
       'http://127.0.0.1:8888',
     ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY || '',

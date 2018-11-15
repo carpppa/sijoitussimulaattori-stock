@@ -6,7 +6,8 @@ import { logger } from '../util/logger';
 import { PromiseQueue } from '../util/promise-queue';
 import { DailyQuote, Symbol, SymbolName } from './stock-data-types';
 
-const ALPHA_VANTAGE_MINIMUM_REQUEST_INTERVAL = 15000; // ms
+const ALPHA_VANTAGE_MINIMUM_REQUEST_INTERVAL =
+  config.app.NODE_ENV !== 'test' ? 15000 : 0; // ms
 const promiseQueue = new PromiseQueue({
   interval: ALPHA_VANTAGE_MINIMUM_REQUEST_INTERVAL,
 });
@@ -148,4 +149,4 @@ const getAvSymbolMetaData = async (symbol: SymbolName): Promise<Symbol> => {
   }
 };
 
-export { getAvDailySeries, getAvSymbolMetaData };
+export { AvRequestQueryParams, getAvDailySeries, getAvSymbolMetaData };
