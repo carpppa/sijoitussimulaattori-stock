@@ -3,8 +3,6 @@ import * as Knex from 'knex';
 import db_connection_config = require('../knexfile');
 import { logger } from './util/logger';
 
-logger.debug('database connection', db_connection_config);
-
 const enum DatabaseTables {
   DailyQuotes = 'daily_quotes',
   Symbols = 'symbols',
