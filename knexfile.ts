@@ -1,18 +1,44 @@
-import config from './src/config';
 import * as pg from 'pg';
-import 'knex';
+
+import config from './src/config';
 
 pg.defaults.ssl = config.app.NODE_ENV === 'production';
 
-export = {
-  client: 'pg',
-  connection: config.db.CONNECTION_STRING,
-  pool: {
-    min: 0,
-    max: 7,
+module.exports = {
+  development: {
+    client: 'pg',
+    connection: config.db.CONNECTION_STRING,
+    pool: {
+      min: 0,
+      max: 7,
+    },
+    migrations: {
+      directory: 'db/migrations',
+      tableName: 'migrations',
+    },
   },
-  migrations: {
-    directory: 'db/migrations',
-    tableName: 'migrations',
+  production: {
+    client: 'pg',
+    connection: config.db.CONNECTION_STRING,
+    pool: {
+      min: 0,
+      max: 10,
+    },
+    migrations: {
+      directory: 'db/migrations',
+      tableName: 'migrations',
+    },
+  },
+  test: {
+    client: 'pg',
+    connection: config.db.CONNECTION_STRING,
+    pool: {
+      min: 0,
+      max: 7,
+    },
+    migrations: {
+      directory: 'db/migrations',
+      tableName: 'migrations',
+    },
   },
 };

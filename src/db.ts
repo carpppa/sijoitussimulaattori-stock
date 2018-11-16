@@ -1,6 +1,8 @@
 import * as Knex from 'knex';
+import * as pg from 'pg';
 
-import db_connection_config = require('../knexfile');
+import * as dbConfig from '../knexfile';
+import config from './config';
 import { logger } from './util/logger';
 
 const enum DatabaseTables {
@@ -29,7 +31,12 @@ const enum SymbolsTable {
   Currency = 'currency',
 }
 
-const client = Knex(db_connection_config);
+// Parse psql big integers as numbers (stored as text):
+pg.types.setTypeParser(20, 'text', parseInt);
+
+const client = Knex(
+  (dbConfig as { [key: string]: Knex.Config })[config.app.NODE_ENV]
+);
 
 client
   .first()

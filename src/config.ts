@@ -1,4 +1,4 @@
-import { ensureNecessaryEnvs, randomInt } from './util/general';
+import { ensureNecessaryEnvs } from './util/general';
 
 process.on('uncaughtException', (err) => {
   console.log('\x1b[31m', 'error: uncaught exception:', err);
@@ -9,7 +9,7 @@ ensureNecessaryEnvs(['NODE_ENV', 'DATABASE_URL', 'ALPHA_VANTAGE_API_KEY']);
 
 const config = {
   app: {
-    NODE_ENV: process.env.NODE_ENV || '',
+    NODE_ENV: process.env.NODE_ENV || 'development',
     LOGGER_LEVEL: process.env.LOG_LEVEL || 'info',
     ALPHA_VANTAGE_URL:
       (process.env.NODE_ENV !== 'development' &&
@@ -18,10 +18,8 @@ const config = {
     ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY || '',
   },
   db: {
-    CONNECTION_STRING:
-      process.env.NODE_ENV === 'test'
-        ? `${process.env.DATABASE_URL}_test${randomInt()}`
-        : process.env.DATABASE_URL || '',
+    CONNECTION_STRING: process.env.DATABASE_URL || '',
+    TIME_ZONE: process.env.TZ,
   },
 };
 
