@@ -46,7 +46,7 @@ Install the following plugins:
 ## Database
 
 - To make all migrations run `npm run migrate:make`
-- To rollback last migration run `npm run migrate:rollback`
+- To rollback all migrations run `npm run migrate:rollback`
 - To create a new migration run `npm run migrate:create <migration-name>`
 - To populate the database:
   - `npm run start:av-dev-server`: starts the development server serving Alpha Vantage data
