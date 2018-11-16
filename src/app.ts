@@ -4,8 +4,6 @@ import * as Joi from 'joi';
 import * as boom from 'express-boom';
 import { NextFunction, Request, Response } from 'express';
 import { Routes } from './routes';
-import { client } from './db';
-import * as Knex from 'knex';
 import * as expressWinston from 'express-winston';
 import { logger } from './util/logger';
 
@@ -16,14 +14,12 @@ interface JoiExpressError extends Error {
 class App {
   public app: express.Application;
   public routeProvider: Routes = new Routes();
-  public dbClient: Knex;
 
   constructor() {
     this.app = express();
     this.routeConfig();
     this.routeProvider.routes(this.app);
     this.config();
-    this.dbClient = client;
   }
 
   private routeConfig(): void {
@@ -36,7 +32,14 @@ class App {
     // Boom HTTP errors
     this.app.use(boom());
 
-    this.app.use(expressWinston.logger(logger));
+    this.app.use(
+      expressWinston.logger({
+        winstonInstance: logger,
+        level: 'debug',
+        msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}}',
+        colorize: true,
+      })
+    );
   }
 
   private config(): void {
