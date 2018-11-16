@@ -41,6 +41,7 @@ Install the following plugins:
 
 ## Running tests
 
+- Start the test database: `docker-compose up test-db`
 - Run `npm test`
 
 ## Database

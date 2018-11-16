@@ -16,10 +16,11 @@ const config = {
         process.env.ALPHA_VANTAGE_URL) ||
       'http://127.0.0.1:8888',
     ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY || '',
+    CI: process.env.TRAVIS || false,
   },
   db: {
     CONNECTION_STRING: process.env.DATABASE_URL || '',
-    TIME_ZONE: process.env.TZ,
+    TIME_ZONE: process.env.TZ || 'GMT',
   },
 };
 

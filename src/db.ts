@@ -38,10 +38,7 @@ const client = Knex(
   (dbConfig as { [key: string]: Knex.Config })[config.app.NODE_ENV]
 );
 
-client
-  .first()
-  .from(DatabaseTables.Symbols)
-  .then((res) => logger.debug('db test query', res))
-  .catch((err) => logger.error('db test query failed', err));
+process.on('exit', () => client.destroy());
+process.on('SIGINT', () => client.destroy());
 
 export { DatabaseTables, DailyQuotesTable, SymbolsTable, client };

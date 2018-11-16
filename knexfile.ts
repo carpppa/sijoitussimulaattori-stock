@@ -2,7 +2,8 @@ import * as pg from 'pg';
 
 import config from './src/config';
 
-pg.defaults.ssl = config.app.NODE_ENV === 'production';
+pg.defaults.ssl =
+  config.app.NODE_ENV === 'production' || config.app.CI === true;
 
 module.exports = {
   development: {
