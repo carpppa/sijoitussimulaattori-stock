@@ -10,9 +10,18 @@ const getDailySeries = async (symbol: SymbolName): Promise<DailyQuote[]> => {
     return (await client
       .select()
       .from(DatabaseTables.DailyQuotes)
-      .where(DailyQuotesTable.Symbol, symbol)) as DailyQuote[];
+      .where(DailyQuotesTable.Symbol, symbol)).reverse() as DailyQuote[];
   } catch (error) {
     logger.error(`fetching daily series for symbol ${symbol}`, error);
+    throw error;
+  }
+};
+
+const getSymbols = async (): Promise<Symbol[]> => {
+  try {
+    return (await client.select().from(DatabaseTables.Symbols)) as Symbol[];
+  } catch (error) {
+    logger.error('fetching symbols', error);
     throw error;
   }
 };
@@ -30,12 +39,10 @@ const getSymbolNames = async (): Promise<Symbol[]> => {
 
 const getLatestDailySeriesEntry = async (
   symbol: SymbolName
-): Promise<DailyQuote> => {
+): Promise<DailyQuote | undefined> => {
   try {
-    return (await client
-      .first()
-      .from(DatabaseTables.DailyQuotes)
-      .where(DailyQuotesTable.Symbol, symbol)) as DailyQuote;
+    const symbolSeries = await getDailySeries(symbol);
+    return symbolSeries.length !== 0 ? symbolSeries[0] : undefined;
   } catch (error) {
     logger.error(
       `fetching latest daily series entry for symbol ${symbol}`,
@@ -60,18 +67,20 @@ const insertNewSymbol = async (symbol: SymbolName): Promise<void> => {
 };
 
 /**
- * Populates the database with the symbols listed in SUPPORTED_SYMBOLS.
+ * Populates the database with the given list of symbols or with
+ * the symbols that are listed in SUPPORTED_SYMBOLS.
  * If the symbol didn't exist in the database before, fetches its meta
  * data and stores it, and then fetches the available market history data.
  * For symbols that already existed, updates only the new
  * entries into the database.
  */
-const populateDb = async (): Promise<void> => {
+const populateDb = async (symbols?: SymbolName[]): Promise<void> => {
+  const symbolNames = symbols !== undefined ? symbols : SUPPORTED_SYMBOLS;
   try {
     const existingSymbols = (await getSymbolNames()).map(
       (equity) => equity.symbol as SymbolName
     );
-    const newSymbols: SymbolName[] = SUPPORTED_SYMBOLS.filter(
+    const newSymbols: SymbolName[] = symbolNames.filter(
       (symbol) => !existingSymbols.includes(symbol)
     );
 
@@ -84,7 +93,7 @@ const populateDb = async (): Promise<void> => {
     );
 
     const symbolsSeriesData: (DailyQuote[] | undefined)[] = await Promise.all(
-      SUPPORTED_SYMBOLS.map(async (symbol) =>
+      symbolNames.map(async (symbol) =>
         getAvDailySeries(
           symbol,
           insertedSymbols
@@ -92,7 +101,9 @@ const populateDb = async (): Promise<void> => {
             .includes(symbol)
             ? 'full'
             : 'compact'
-        ).catch(() => undefined)
+        )
+          .then((series: DailyQuote[]) => series.reverse())
+          .catch(() => undefined)
       )
     );
 
@@ -108,7 +119,6 @@ const populateDb = async (): Promise<void> => {
             return !latestQuote
               ? dailyQuotes
               : dailyQuotes.slice(
-                  0,
                   dailyQuotes.findIndex(
                     (quote) => quote.date > latestQuote.date
                   )
@@ -133,4 +143,4 @@ const populateDb = async (): Promise<void> => {
   }
 };
 
-export { getDailySeries, populateDb };
+export { getDailySeries, getSymbols, populateDb };
