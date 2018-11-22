@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import * as express from 'express';
 import * as validation from 'express-joi-validation';
+import * as Joi from 'joi';
 
-import { helloName } from './validation';
+import { getDailySeries } from './services/db';
+import { equitySymbol, helloName, dailyQuotes } from './validation';
 
 export class Routes {
   private validator = validation({ passError: true });
@@ -21,5 +23,21 @@ export class Routes {
           message: `Hello, ${req.body.name.first}!`,
         });
       });
+
+    app
+      .route('/stock/:symbol')
+      .get(
+        this.validator.params(equitySymbol),
+        async (req: Request, res: Response) => {
+          try {
+            const quotes = await getDailySeries(req.params.symbol);
+
+            Joi.assert(quotes, dailyQuotes);
+            res.json(quotes);
+          } catch (error) {
+            res.boom.badImplementation();
+          }
+        }
+      );
   }
 }

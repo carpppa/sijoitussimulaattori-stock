@@ -2,5 +2,10 @@ sudo: required
 language: node_js
 node_js:
   - '10'
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+script: npm run test:ci
 env:
-  - NODE_VERSION=10
+  - NODE_VERSION=10 NODE_ENV=test DATABASE_URL=postgres://postgres@localhost/travis_ci_test ALPHA_VANTAGE_API_KEY=foo TZ=GMT

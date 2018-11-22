@@ -11,7 +11,9 @@
       "*": ["node_modules/*", "src/types/*"]
     },
     "baseUrl": ".",
+    "resolveJsonModule": true,
     "strictNullChecks": true
   },
-  "include": ["index.ts", "src/**/*"]
+  "include": ["index.ts", "src/**/*"],
+  "exclude": ["**/__tests__"]
 }

@@ -4,6 +4,8 @@ import * as Joi from 'joi';
 import * as boom from 'express-boom';
 import { NextFunction, Request, Response } from 'express';
 import { Routes } from './routes';
+import * as expressWinston from 'express-winston';
+import { logger } from './util/logger';
 
 interface JoiExpressError extends Error {
   error: Joi.ValidationError;
@@ -29,6 +31,15 @@ class App {
 
     // Boom HTTP errors
     this.app.use(boom());
+
+    this.app.use(
+      expressWinston.logger({
+        winstonInstance: logger,
+        level: 'debug',
+        msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}}',
+        colorize: true,
+      })
+    );
   }
 
   private config(): void {

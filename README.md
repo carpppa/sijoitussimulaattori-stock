@@ -2,6 +2,16 @@
 
 # sijoitussimulaattori-stock
 
+## Getting started
+
+Prerequisities:
+
+- Node (v10 or higher)
+- npm (v6 or higher)
+- Docker
+
+Clone the project and run `npm install` and `npm run build-ts`.
+
 ## Project setup instructions for vscode (recommended)
 
 Install the following plugins:
@@ -24,9 +34,32 @@ Install the following plugins:
 
 ## Running the project
 
-- Clean project: run `npm run build-ts`
-- Development: run `npm run start:dev`
+- Development:
+  - run `docker-compose up db`
+  - see section **Database** on how to setup the database
+  - run `npm run start:dev` in another console
 
 ## Running tests
 
+- Start the test database: `docker-compose up test-db`
 - Run `npm test`
+
+## Database
+
+- To make all migrations run `npm run migrate:make`
+- To rollback all migrations run `npm run migrate:rollback`
+- To create a new migration run `npm run migrate:create <migration-name>`
+- To populate the database:
+  - `npm run start:av-dev-server`: starts the development server serving Alpha Vantage data
+    - On the first time, you must go to the development server folder and run `npm install`
+  - `npm run populate-db:dev`: populates the database
+
+## Environment variables
+
+The following environment variables are used:
+
+- `NODE_ENV` : `production | development | test`
+- `LOG_LEVEL` : one of `winston` [log levels](https://github.com/winstonjs/winston#logging-levels) (optional, default value `info`)
+- `DATABASE_URL` : the database connection string: `postgres://<db_username>:<db_password>@<db_hostname>:<db_port>/<database>`
+- `ALPHA_VANTAGE_URL` : the base URL for Alpha Vantage API service. Not used when `NODE_ENV !== 'production'` and therefore optional
+- `ALPHA_VANTAGE_API_KEY` : the API key for Alpha Vantage service. Can be anything when `NODE_ENV !== 'production'`
