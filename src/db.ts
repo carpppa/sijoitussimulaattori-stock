@@ -38,7 +38,4 @@ const client = Knex(
   (dbConfig as { [key: string]: Knex.Config })[config.app.NODE_ENV]
 );
 
-process.on('exit', () => client.destroy());
-process.on('SIGINT', () => client.destroy());
-
 export { DatabaseTables, DailyQuotesTable, SymbolsTable, client };
