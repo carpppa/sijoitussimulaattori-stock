@@ -86,4 +86,71 @@ const dailySeriesLatestData: DailyQuote[] = [
   },
 ];
 
-export { mockAvEndpoint, symbolData, dailySeriesData, dailySeriesLatestData };
+const intradayData: DailyQuote[] = [
+  {
+    symbol: 'AAPL',
+    date: new Date('2018-11-29 15:50:00'),
+    open: 179.94,
+    high: 180.05,
+    low: 179.81,
+    close: 179.82,
+    volume: 606523,
+  },
+  {
+    symbol: 'AAPL',
+    date: new Date('2018-11-29 15:45:00'),
+    open: 179.77,
+    high: 179.95,
+    low: 179.76,
+    close: 179.95,
+    volume: 341296,
+  },
+];
+
+const intradayLatestData: DailyQuote[] = [
+  {
+    symbol: 'AAPL',
+    date: new Date('2018-11-29 16:00:00'),
+    open: 179.86,
+    high: 179.86,
+    low: 179.5,
+    close: 179.55,
+    volume: 1164136,
+  },
+  {
+    symbol: 'AAPL',
+    date: new Date('2018-11-29 15:55:00'),
+    open: 179.83,
+    high: 179.94,
+    low: 179.66,
+    close: 179.8547,
+    volume: 604670,
+  },
+  {
+    symbol: 'AAPL',
+    date: new Date('2018-11-29 15:50:00'),
+    open: 179.94,
+    high: 180.05,
+    low: 179.81,
+    close: 179.82,
+    volume: 606523,
+  },
+  {
+    symbol: 'AAPL',
+    date: new Date('2018-11-29 15:45:00'),
+    open: 179.77,
+    high: 179.95,
+    low: 179.76,
+    close: 179.95,
+    volume: 341296,
+  },
+];
+
+export {
+  mockAvEndpoint,
+  symbolData,
+  dailySeriesData,
+  dailySeriesLatestData,
+  intradayData,
+  intradayLatestData,
+};
