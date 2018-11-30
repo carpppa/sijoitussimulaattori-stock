@@ -15,10 +15,11 @@ const promiseQueue = new PromiseQueue({
 type AvQueryOutputSize = 'compact' | 'full';
 
 interface AvRequestQueryParams {
-  function: 'TIME_SERIES_DAILY' | 'SYMBOL_SEARCH';
+  function: 'TIME_SERIES_DAILY' | 'TIME_SERIES_INTRADAY' | 'SYMBOL_SEARCH';
   symbol?: SymbolName;
   outputsize?: AvQueryOutputSize;
   keywords?: SymbolName;
+  interval?: '5min' | '10min';
 }
 
 interface AvDailyQuote {
@@ -41,6 +42,36 @@ interface AvDailySeries {
     [timestamp: string]: AvDailyQuote;
   };
 }
+
+interface AvIntraDaySeriesMetaData<
+  Interval = AvRequestQueryParams['interval']
+> {
+  'Meta Data': {
+    '1. Information': string;
+    '2. Symbol': SymbolName;
+    '3. Last Refreshed': string;
+    '4. Interval': Interval;
+    '5. Output Size': 'Compact' | 'Full size';
+    '6. Time Zone': string;
+  };
+}
+
+type TimeSeriesKey<
+  Interval = AvRequestQueryParams['interval']
+> = Interval extends '5min'
+  ? 'Time Series (5min)'
+  : Interval extends '10min'
+  ? 'Time Series (10min)'
+  : never;
+
+type AvIntraDayTimeSeries<Interval = AvRequestQueryParams['interval']> = {
+  [k in TimeSeriesKey<Interval>]: {
+    [timestamp: string]: AvDailyQuote;
+  }
+};
+
+type AvIntraDaySeries<Interval> = AvIntraDaySeriesMetaData<Interval> &
+  AvIntraDayTimeSeries<Interval>;
 
 interface AvSymbolMetaData {
   '1. symbol': string;
@@ -75,6 +106,25 @@ const makeAvRequest = async <T>(
   }
 };
 
+const avTimeSeriesToDailyQuotes = (
+  symbol: SymbolName,
+  avTimeSeries: [string, AvDailyQuote][]
+): DailyQuote[] => {
+  const dailySeries = avTimeSeries.map(
+    (entry) =>
+      ({
+        symbol: symbol,
+        date: new Date(entry[0]),
+        open: Number.parseFloat(entry[1]['1. open']),
+        high: Number.parseFloat(entry[1]['2. high']),
+        low: Number.parseFloat(entry[1]['3. low']),
+        close: Number.parseFloat(entry[1]['4. close']),
+        volume: Number.parseInt(entry[1]['5. volume']),
+      } as DailyQuote)
+  );
+  return dailySeries;
+};
+
 const getAvDailySeries = async (
   symbol: SymbolName,
   outputSize: AvQueryOutputSize = 'compact'
@@ -88,27 +138,37 @@ const getAvDailySeries = async (
 
     const avDailySeries = await makeAvRequest<AvDailySeries>(queryParams);
 
-    const avTimeSeries = Object.values(
-      avDailySeries.data['Time Series (Daily)']
+    return avTimeSeriesToDailyQuotes(
+      symbol,
+      Object.entries(avDailySeries.data['Time Series (Daily)'])
     );
-    const dailySeries = Object.keys(
-      avDailySeries.data['Time Series (Daily)']
-    ).map(
-      (key, index) =>
-        ({
-          symbol: symbol,
-          date: new Date(key),
-          open: Number.parseFloat(avTimeSeries[index]['1. open']),
-          high: Number.parseFloat(avTimeSeries[index]['2. high']),
-          low: Number.parseFloat(avTimeSeries[index]['3. low']),
-          close: Number.parseFloat(avTimeSeries[index]['4. close']),
-          volume: Number.parseInt(avTimeSeries[index]['5. volume']),
-        } as DailyQuote)
-    );
-
-    return dailySeries;
   } catch (error) {
     logger.error('stock daily series request fail', error);
+    throw error;
+  }
+};
+
+const getAvIntraDaySeries = async (
+  symbol: SymbolName
+): Promise<DailyQuote[]> => {
+  try {
+    const queryParams: AvRequestQueryParams = {
+      function: 'TIME_SERIES_INTRADAY',
+      symbol: symbol,
+      interval: '5min',
+      outputsize: 'compact',
+    };
+
+    const avIntraDaySeries = await makeAvRequest<AvIntraDaySeries<'5min'>>(
+      queryParams
+    );
+
+    return avTimeSeriesToDailyQuotes(
+      symbol,
+      Object.entries(avIntraDaySeries.data['Time Series (5min)'])
+    );
+  } catch (error) {
+    logger.error('stock intraday series request fail', error);
     throw error;
   }
 };
@@ -149,4 +209,9 @@ const getAvSymbolMetaData = async (symbol: SymbolName): Promise<Symbol> => {
   }
 };
 
-export { AvRequestQueryParams, getAvDailySeries, getAvSymbolMetaData };
+export {
+  AvRequestQueryParams,
+  getAvDailySeries,
+  getAvIntraDaySeries,
+  getAvSymbolMetaData,
+};
