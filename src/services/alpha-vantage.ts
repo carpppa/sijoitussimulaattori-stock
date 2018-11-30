@@ -163,10 +163,14 @@ const getAvIntraDaySeries = async (
       queryParams
     );
 
-    return avTimeSeriesToDailyQuotes(
+    const timeSeries = avTimeSeriesToDailyQuotes(
       symbol,
       Object.entries(avIntraDaySeries.data['Time Series (5min)'])
     );
+    const prevMidnight = new Date(
+      new Date(timeSeries[0].date).setUTCHours(0, 0, 0, 0)
+    );
+    return timeSeries.filter((quote) => quote.date > prevMidnight);
   } catch (error) {
     logger.error('stock intraday series request fail', error);
     throw error;
