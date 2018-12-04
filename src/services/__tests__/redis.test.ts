@@ -10,6 +10,7 @@ import nock = require('nock');
 import * as intradaySeriesLatest from './util/data/intraday-series-latest.json';
 import * as intradaySeriesNewDay from './util/data/intraday-series-new-day.json';
 import * as intradaySeries from './util/data/intraday-series.json';
+import { closeConnection } from '../../redis';
 
 describe('Redis cache', async () => {
   beforeAll(async () => {
@@ -18,6 +19,7 @@ describe('Redis cache', async () => {
 
   afterAll(async () => {
     await flushCache();
+    await closeConnection();
   });
 
   it('should be populated correctly when initially empty', async () => {
