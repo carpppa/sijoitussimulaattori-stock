@@ -1,8 +1,7 @@
 {
   "name": "Sijoitussimulaattori Stock",
   "description": "",
-  "scripts": {
-  },
+  "scripts": {},
   "env": {
     "NODE_ENV": "production",
     "LOG_LEVEL": "info",
@@ -18,9 +17,7 @@
       "quantity": 1
     }
   },
-  "addons": [
-    "heroku-postgresql"
-  ],
+  "addons": ["heroku-postgresql", "heroku-redis"],
   "buildpacks": [
     {
       "url": "heroku/nodejs"
