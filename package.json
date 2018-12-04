@@ -57,6 +57,7 @@
     "joi": "^13.7.0",
     "knex": "^0.15.2",
     "pg": "^7.6.0",
+    "redis": "^2.8.0",
     "winston": "^3.1.0"
   },
   "devDependencies": {
@@ -68,12 +69,13 @@
     "@types/nock": "^9.3.0",
     "@types/node": "^10.11.7",
     "@types/pg": "^7.4.11",
+    "@types/redis": "^2.8.8",
     "@types/supertest": "^2.0.6",
     "concurrently": "^4.0.1",
     "env-cmd": "^8.0.2",
     "jest": "^23.6.0",
     "nock": "^10.0.2",
-    "nodemon": "^1.18.4",
+    "nodemon": "^1.18.7",
     "supertest": "^3.3.0",
     "ts-jest": "^23.10.4",
     "ts-node": "^7.0.1",
