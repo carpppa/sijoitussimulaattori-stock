@@ -146,6 +146,27 @@ const intradayLatestData: DailyQuote[] = [
   },
 ];
 
+const intradayNewDayData: DailyQuote[] = [
+  {
+    symbol: 'AAPL',
+    date: new Date('2018-11-30 16:00:00'),
+    open: 135.57,
+    high: 135.57,
+    low: 135.59,
+    close: 135.53,
+    volume: 1157136,
+  },
+  {
+    symbol: 'AAPL',
+    date: new Date('2018-11-30 15:55:00'),
+    open: 135.81,
+    high: 135.93,
+    low: 135.65,
+    close: 135.8747,
+    volume: 604625,
+  },
+];
+
 export {
   mockAvEndpoint,
   symbolData,
@@ -153,4 +174,5 @@ export {
   dailySeriesLatestData,
   intradayData,
   intradayLatestData,
+  intradayNewDayData,
 };
