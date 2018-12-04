@@ -3,7 +3,6 @@ import { logger } from '../util/logger';
 import { getAvIntraDaySeries } from './alpha-vantage';
 import { client } from '../redis';
 import { getOrThrow } from '../util/general';
-import { resolve4 } from 'dns';
 
 /**
  * Data structure for the redis cache is as follows:
@@ -153,6 +152,10 @@ const insertNewQuote = async (
     });
   });
 
+/**
+ * Fetch a quote, specified by the given key, from the cache.
+ * @param entryKey The key specifying the quote to fetch
+ */
 const getQuote = async (entryKey: string): Promise<DailyQuote> =>
   new Promise<DailyQuote>((resolve, reject) =>
     client.hgetall(entryKey, (err, res: DailyQuoteHash) => {
@@ -208,6 +211,9 @@ const populateCache = async (symbols?: SymbolName[]): Promise<void> => {
   }
 };
 
+/**
+ * Completely flush the redis store.
+ */
 const flushCache = async (): Promise<void> =>
   new Promise<void>((resolve, reject) =>
     client.flushdb((err) => {
@@ -219,6 +225,10 @@ const flushCache = async (): Promise<void> =>
     })
   );
 
+/**
+ * Fetch the intraday series for the given symbol.
+ * @param symbol The symbol for which to fetch the series data.
+ */
 const getIntraDaySeries = async (symbol: SymbolName): Promise<DailyQuote[]> => {
   try {
     const entryKeys = await getEntryKeys(symbol);
