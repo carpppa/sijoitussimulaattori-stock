@@ -3,7 +3,6 @@ import * as pg from 'pg';
 
 import * as dbConfig from '../knexfile';
 import config from './config';
-import { logger } from './util/logger';
 
 const enum DatabaseTables {
   DailyQuotes = 'daily_quotes',
