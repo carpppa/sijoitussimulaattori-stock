@@ -19,4 +19,9 @@ const randomInt = (
   return Math.floor(Math.random() * (high - low) + low);
 };
 
-export { ensureNecessaryEnvs, randomInt };
+const getOrThrow = <T>(prop: string, obj: { [key: string]: any }) => {
+  if (prop in obj) return obj[prop] as T;
+  throw new Error(`property ${prop} does not exist in the object`);
+};
+
+export { ensureNecessaryEnvs, randomInt, getOrThrow };
