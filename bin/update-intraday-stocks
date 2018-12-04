@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+
+const { populateCache } = require('../dist/src/services/redis');
+const { logger } = require('../dist/src/util/logger');
+
+populateCache()
+  .then(() => {
+    logger.info('cache updated successfully');
+    process.exit();
+  })
+  .catch((error) => {
+    logger.error('cache update failed');
+    process.exit();
+  });

@@ -18,6 +18,8 @@
     "migrate:make": "env-cmd .env knex migrate:latest",
     "migrate:rollback": "env-cmd .env knex migrate:rollback",
     "populate-db:dev": "env-cmd .env node bin/update-stocks",
+    "populate-cache:dev": "env-cmd .env node bin/update-intraday-stocks",
+    "flush-cache:dev": "env-cmd .env node bin/flush-intraday-stocks",
     "heroku-postbuild": "bash ./tools/build.sh"
   },
   "jest": {
