@@ -8,6 +8,7 @@ process.on('uncaughtException', (err) => {
 ensureNecessaryEnvs([
   'NODE_ENV',
   'DATABASE_URL',
+  'REDIS_URL',
   'ALPHA_VANTAGE_URL',
   'ALPHA_VANTAGE_API_KEY',
 ]);
@@ -23,6 +24,9 @@ const config = {
   db: {
     CONNECTION_STRING: process.env.DATABASE_URL || '',
     TIME_ZONE: process.env.TZ || 'GMT',
+  },
+  redis: {
+    REDIS_URL: process.env.REDIS_URL || '',
   },
 };
 
