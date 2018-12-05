@@ -5,17 +5,15 @@ import * as Joi from 'joi';
 import * as swaggerUi from 'swagger-ui-express';
 
 import * as swaggerDocument from './docs/swagger.json';
-import { getDailySeries } from './services/db';
+import { getDailySeries, getStockListing } from './services/db';
 import { getIntraDaySeries } from './services/redis';
-import { dailyQuotes, equitySymbol, helloName } from './validation';
+import { dailyQuotes, equitySymbol, helloName, stockListing } from './validation';
 
 export class Routes {
   private validator = validation({ passError: true });
 
   public routes(app: express.Application): void {
-
-    app
-      .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     app.route('/').get((req: Request, res: Response) => {
       res.status(200).send({
@@ -30,6 +28,32 @@ export class Routes {
           message: `Hello, ${req.body.name.first}!`,
         });
       });
+
+    app.route('/stocks').get(async (req: Request, res: Response) => {
+      try {
+        const stocks = await getStockListing();
+        Joi.assert(stocks, stockListing);
+        res.json(stocks);
+      } catch (error) {
+        res.boom.badImplementation();
+      }
+    });
+
+    app
+      .route('/stock/history/:symbol')
+      .get(
+        this.validator.params(equitySymbol),
+        async (req: Request, res: Response) => {
+          try {
+            const quotes = await getDailySeries(req.params.symbol);
+
+            Joi.assert(quotes, dailyQuotes);
+            res.json(quotes);
+          } catch (error) {
+            res.boom.badImplementation();
+          }
+        }
+      );
 
     app
       .route('/stock/:symbol/history')

@@ -1,5 +1,5 @@
-type SymbolName = 'AAPL'; // | 'AMZN' | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
-const SUPPORTED_SYMBOLS: SymbolName[] = ['AAPL']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
+type SymbolName = 'AAPL' | 'AMZN'; // | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
+const SUPPORTED_SYMBOLS: SymbolName[] = ['AAPL', 'AMZN']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
 
 interface DailyQuote {
   symbol: SymbolName;
@@ -22,4 +22,29 @@ interface Symbol {
   currency: string;
 }
 
-export { SymbolName, SUPPORTED_SYMBOLS, DailyQuote, Symbol };
+interface Stock {
+  symbol: string;
+  name: string;
+  buy: number;
+  sell: number;
+  high: number;
+  low: number;
+  marketValue: 0;
+  revenue: number;
+  close: number;
+}
+
+interface StockListing {
+  symbol: string;
+  name: string;
+  revenue: number;
+  close: number;
+}
+export {
+  SymbolName,
+  SUPPORTED_SYMBOLS,
+  DailyQuote,
+  Symbol,
+  StockListing,
+  Stock,
+};

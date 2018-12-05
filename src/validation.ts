@@ -29,4 +29,13 @@ const dailyQuotes = Joi.array().items(
   })
 );
 
-export { equitySymbol, dailyQuotes, helloName };
+const stockListing = Joi.array().items(
+  Joi.object({
+    symbol: Joi.string().required(),
+    name: Joi.string().required(),
+    revenue: Joi.number().required(),
+    close: Joi.number().required(),
+  })
+);
+
+export { equitySymbol, dailyQuotes, helloName, stockListing };
