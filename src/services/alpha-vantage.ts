@@ -13,13 +13,14 @@ const promiseQueue = new PromiseQueue({
 });
 
 type AvQueryOutputSize = 'compact' | 'full';
+type AvInterval = '5min' | '10min';
 
 interface AvRequestQueryParams {
   function: 'TIME_SERIES_DAILY' | 'TIME_SERIES_INTRADAY' | 'SYMBOL_SEARCH';
   symbol?: SymbolName;
   outputsize?: AvQueryOutputSize;
   keywords?: SymbolName;
-  interval?: '5min' | '10min';
+  interval?: AvInterval;
 }
 
 interface AvDailyQuote {
@@ -43,9 +44,7 @@ interface AvDailySeries {
   };
 }
 
-interface AvIntraDaySeriesMetaData<
-  Interval = AvRequestQueryParams['interval']
-> {
+interface AvIntraDaySeriesMetaData<Interval = AvInterval> {
   'Meta Data': {
     '1. Information': string;
     '2. Symbol': SymbolName;
@@ -57,20 +56,22 @@ interface AvIntraDaySeriesMetaData<
 }
 
 type TimeSeriesKey<
-  Interval = AvRequestQueryParams['interval']
+  Interval extends AvInterval = AvInterval
 > = Interval extends '5min'
   ? 'Time Series (5min)'
   : Interval extends '10min'
   ? 'Time Series (10min)'
   : never;
 
-type AvIntraDayTimeSeries<Interval = AvRequestQueryParams['interval']> = {
+type AvIntraDayTimeSeries<Interval extends AvInterval = AvInterval> = {
   [k in TimeSeriesKey<Interval>]: {
     [timestamp: string]: AvDailyQuote;
   }
 };
 
-type AvIntraDaySeries<Interval> = AvIntraDaySeriesMetaData<Interval> &
+type AvIntraDaySeries<Interval extends AvInterval> = AvIntraDaySeriesMetaData<
+  Interval
+> &
   AvIntraDayTimeSeries<Interval>;
 
 interface AvSymbolMetaData {
