@@ -3,7 +3,6 @@ import * as pg from 'pg';
 
 import * as dbConfig from '../knexfile';
 import config from './config';
-import { logger } from './util/logger';
 
 const enum DatabaseTables {
   DailyQuotes = 'daily_quotes',
@@ -37,8 +36,5 @@ pg.types.setTypeParser(20, 'text', parseInt);
 const client = Knex(
   (dbConfig as { [key: string]: Knex.Config })[config.app.NODE_ENV]
 );
-
-process.on('exit', () => client.destroy());
-process.on('SIGINT', () => client.destroy());
 
 export { DatabaseTables, DailyQuotesTable, SymbolsTable, client };

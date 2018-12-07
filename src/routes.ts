@@ -5,6 +5,7 @@ import * as Joi from 'joi';
 
 import { getDailySeries } from './services/db';
 import { equitySymbol, helloName, dailyQuotes } from './validation';
+import { getIntraDaySeries } from './services/redis';
 
 export class Routes {
   private validator = validation({ passError: true });
@@ -25,7 +26,7 @@ export class Routes {
       });
 
     app
-      .route('/stock/:symbol')
+      .route('/stock/:symbol/history')
       .get(
         this.validator.params(equitySymbol),
         async (req: Request, res: Response) => {
@@ -34,6 +35,22 @@ export class Routes {
 
             Joi.assert(quotes, dailyQuotes);
             res.json(quotes);
+          } catch (error) {
+            res.boom.badImplementation();
+          }
+        }
+      );
+
+    app
+      .route('/stock/:symbol/intraday')
+      .get(
+        this.validator.params(equitySymbol),
+        async (req: Request, res: Response) => {
+          try {
+            const intraday = await getIntraDaySeries(req.params.symbol);
+
+            Joi.assert(intraday, dailyQuotes);
+            res.json(intraday);
           } catch (error) {
             res.boom.badImplementation();
           }

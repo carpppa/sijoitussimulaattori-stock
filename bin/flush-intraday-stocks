@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+
+const { flushCache } = require('../dist/src/services/redis');
+const { logger } = require('../dist/src/util/logger');
+
+flushCache()
+  .then(() => {
+    logger.info('cache flushed successfully');
+    process.exit();
+  })
+  .catch((error) => {
+    logger.error('cache flush failed');
+    process.exit();
+  });

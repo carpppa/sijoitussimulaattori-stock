@@ -22,6 +22,22 @@ services:
     volumes:
       - pgtestdata:/var/lib/postgresql/test-data
 
+  redis:
+    image: redis:3.2
+    ports:
+      - '127.0.0.1:6379:6379'
+    volumes:
+      - redisdata:/var/lib/redis/data
+
+  test-redis:
+    image: redis:3.2
+    ports:
+      - '127.0.0.1:6380:6379'
+    volumes:
+      - redistestdata:/var/lib/redis/data
+
 volumes:
   pgdata: {}
   pgtestdata: {}
+  redisdata: {}
+  redistestdata: {}
