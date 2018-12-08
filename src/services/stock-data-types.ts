@@ -25,26 +25,10 @@ interface Symbol {
 interface Stock {
   symbol: string;
   name: string;
-  buy: number;
-  sell: number;
   high: number;
   low: number;
-  marketValue: 0;
   revenue: number;
   close: number;
 }
 
-interface StockListing {
-  symbol: string;
-  name: string;
-  revenue: number;
-  close: number;
-}
-export {
-  SymbolName,
-  SUPPORTED_SYMBOLS,
-  DailyQuote,
-  Symbol,
-  StockListing,
-  Stock,
-};
+export { SymbolName, SUPPORTED_SYMBOLS, DailyQuote, Symbol, Stock };

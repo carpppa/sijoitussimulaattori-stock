@@ -1,8 +1,8 @@
-import { SymbolName, SUPPORTED_SYMBOLS, DailyQuote } from './stock-data-types';
-import { logger } from '../util/logger';
-import { getAvIntraDaySeries } from './alpha-vantage';
 import { client } from '../redis';
 import { getOrThrow } from '../util/general';
+import { logger } from '../util/logger';
+import { getAvIntraDaySeries } from './alpha-vantage';
+import { DailyQuote, SUPPORTED_SYMBOLS, SymbolName } from './stock-data-types';
 
 /**
  * Data structure for the redis cache is as follows:
@@ -244,4 +244,24 @@ const getIntraDaySeries = async (symbol: SymbolName): Promise<DailyQuote[]> => {
   }
 };
 
-export { populateCache, flushCache, getIntraDaySeries };
+const getLatestIntraDaySeries = async (
+  symbol: SymbolName
+): Promise<DailyQuote | undefined> => {
+  try {
+    const symbolSeries = await getIntraDaySeries(symbol);
+    return symbolSeries.length !== 0 ? symbolSeries[0] : undefined;
+  } catch (error) {
+    logger.error(
+      `fetching latest intraday series entry for symbol ${symbol}`,
+      error
+    );
+    throw error;
+  }
+};
+
+export {
+  populateCache,
+  flushCache,
+  getIntraDaySeries,
+  getLatestIntraDaySeries,
+};

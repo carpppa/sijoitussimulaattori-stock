@@ -15,6 +15,19 @@ const equitySymbol = Joi.object({
     .required(),
 });
 
+const metaData = Joi.array().items(
+  Joi.object({
+    symbol: Joi.string().required(),
+    name: Joi.string().required(),
+    type: Joi.string().required(),
+    region: Joi.string().required(),
+    marketOpen: Joi.string().required(),
+    marketClose: Joi.string().required(),
+    timeZone: Joi.string().required(),
+    currency: Joi.string().required(),
+  })
+);
+
 const dailyQuotes = Joi.array().items(
   Joi.object({
     symbol: Joi.string().required(),
@@ -29,13 +42,28 @@ const dailyQuotes = Joi.array().items(
   })
 );
 
-const stockListing = Joi.array().items(
-  Joi.object({
-    symbol: Joi.string().required(),
-    name: Joi.string().required(),
-    revenue: Joi.number().required(),
-    close: Joi.number().required(),
-  })
-);
+const stockData = Joi.object({
+  symbol: Joi.string().required(),
+  name: Joi.string().required(),
+  high: Joi.number().required(),
+  low: Joi.number().required(),
+  revenue: Joi.number().required(),
+  close: Joi.number().required(),
+});
 
-export { equitySymbol, dailyQuotes, helloName, stockListing };
+const allStockData = Joi.object({
+  dailyQuotes: dailyQuotes,
+  intraDay: dailyQuotes,
+  symbols: metaData,
+});
+
+const stockListing = Joi.array().items(stockData);
+
+export {
+  equitySymbol,
+  dailyQuotes,
+  helloName,
+  stockListing,
+  stockData,
+  allStockData,
+};
