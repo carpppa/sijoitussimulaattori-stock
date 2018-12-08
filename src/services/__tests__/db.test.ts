@@ -1,13 +1,8 @@
 import nock = require('nock');
 
 import { client } from '../../db';
-import { getDailySeries, getSymbols, populateDb } from '../db';
-import {
-  dailySeriesData,
-  dailySeriesLatestData,
-  mockAvEndpoint,
-  symbolData,
-} from './util/alpha-vantage-mock';
+import { getAllSymbols, getDailySeries, populateDb } from '../db';
+import { dailySeriesData, dailySeriesLatestData, mockAvEndpoint, symbolData } from './util/alpha-vantage-mock';
 import * as dailySeriesLatest from './util/data/daily-series-latest.json';
 import * as dailySeries from './util/data/daily-series.json';
 import * as symbolSearch from './util/data/symbol-search.json';
@@ -44,7 +39,7 @@ describe('Database', async () => {
 
     await populateDb(['AAPL']);
 
-    const dbSymbols = await getSymbols();
+    const dbSymbols = await getAllSymbols();
     expect(dbSymbols).toEqual([symbolData]);
 
     const dbSeries = await getDailySeries('AAPL');
@@ -66,7 +61,7 @@ describe('Database', async () => {
     );
     await populateDb(['AAPL']);
 
-    const dbSymbols = await getSymbols();
+    const dbSymbols = await getAllSymbols();
     expect(dbSymbols).toEqual([symbolData]);
 
     const dbSeries = await getDailySeries('AAPL');

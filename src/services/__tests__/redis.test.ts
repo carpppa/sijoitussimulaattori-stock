@@ -1,16 +1,11 @@
-import {
-  mockAvEndpoint,
-  intradayData,
-  intradayLatestData,
-  intradayNewDayData,
-} from './util/alpha-vantage-mock';
-import { populateCache, getIntraDaySeries, flushCache } from '../redis';
 import nock = require('nock');
 
+import { closeConnection } from '../../redis';
+import { flushCache, getIntraDaySeries, populateCache } from '../redis';
+import { intradayData, intradayLatestData, intradayNewDayData, mockAvEndpoint } from './util/alpha-vantage-mock';
 import * as intradaySeriesLatest from './util/data/intraday-series-latest.json';
 import * as intradaySeriesNewDay from './util/data/intraday-series-new-day.json';
 import * as intradaySeries from './util/data/intraday-series.json';
-import { closeConnection } from '../../redis';
 
 describe('Redis cache', async () => {
   beforeAll(async () => {
