@@ -15,19 +15,6 @@ const equitySymbol = Joi.object({
     .required(),
 });
 
-const metaData = Joi.array().items(
-  Joi.object({
-    symbol: Joi.string().required(),
-    name: Joi.string().required(),
-    type: Joi.string().required(),
-    region: Joi.string().required(),
-    marketOpen: Joi.string().required(),
-    marketClose: Joi.string().required(),
-    timeZone: Joi.string().required(),
-    currency: Joi.string().required(),
-  })
-);
-
 const dailyQuotes = Joi.array().items(
   Joi.object({
     symbol: Joi.string().required(),
@@ -52,9 +39,16 @@ const stockData = Joi.object({
 });
 
 const allStockData = Joi.object({
+  symbol: Joi.string().required(),
+  name: Joi.string().required(),
+  type: Joi.string().required(),
+  region: Joi.string().required(),
+  marketOpen: Joi.string().required(),
+  marketClose: Joi.string().required(),
+  timeZone: Joi.string().required(),
+  currency: Joi.string().required(),
   dailyQuotes: dailyQuotes,
   intraDay: dailyQuotes,
-  symbols: metaData,
 });
 
 const stockListing = Joi.array().items(stockData);

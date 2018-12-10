@@ -26,20 +26,13 @@ const getAllSymbols = async (): Promise<Symbol[]> => {
   }
 };
 
-<<<<<<< HEAD
 const getSymbol = async (symbol: SymbolName): Promise<Symbol[]> => {
-=======
-const getSymbol = async (symbol: SymbolName): Promise<Symbol> => {
->>>>>>>  Implemented the API-endpoints for stock-data
   try {
     return (await client
       .select()
       .from(DatabaseTables.Symbols)
-<<<<<<< HEAD
+
       .where(SymbolsTable.Symbol, symbol)) as Symbol[];
-=======
-      .where(SymbolsTable.Symbol, symbol)) as Symbol;
->>>>>>>  Implemented the API-endpoints for stock-data
   } catch (error) {
     logger.error('fetching symbols', error);
     throw error;
