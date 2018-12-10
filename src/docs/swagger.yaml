@@ -10,6 +10,7 @@ tags:
 - name: "test"
   description: ""
 schemes:
+- "https"
 - "http"
 paths:
   /:
