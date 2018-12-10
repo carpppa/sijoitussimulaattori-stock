@@ -1,0 +1,200 @@
+swagger: "2.0"
+info:
+  description: "This is documentation for sijoitussimulaattori-profile API"
+  version: "1.0.0"
+  title: "Sijoitussimulaattori"
+
+host: "localhost:3000"
+basePath: "/"
+tags:
+- name: "test"
+  description: ""
+schemes:
+- "http"
+paths:
+  /:
+    get:
+      tags:
+      - "test"
+      summary: "Test api"
+      description: ""
+      operationId: "getHello"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Delete was successful"
+          schema:
+            $ref: "#/definitions/Hello"
+
+  /hello:
+    get:
+      tags:
+      - "test"
+      summary: "Test api"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Delete was successful"
+          schema:
+            $ref: "#/definitions/Hello"
+
+  /stock:
+    get:
+      tags:
+      - "Stocks"
+      summary: "Get list of stocks"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Delete was successful"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/StockListDataObject"
+
+  /stock/{symbol}:
+    get:
+      tags:
+      - "Stocks"
+      summary: "Get stock data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: symbol
+        required: true
+        type: "string"
+        description: "Symbol of stock of interest"
+      responses:
+        200:
+          description: "Delete was successful"
+          schema:
+            type: "object"
+            properties:
+              dailyQuotes:
+                type: "array"
+                items:
+                  $ref: '#/definitions/DailyQuote'
+              intraDay:
+                type: "array"
+                items:
+                  $ref: '#/definitions/DailyQuote'
+              symbol:
+                $ref: '#/definitions/Symbol'
+
+  /stock/{symbol}/history:
+    get:
+      tags:
+      - "Stocks"
+      summary: "Get stock daily data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: symbol
+        required: true
+        type: "string"
+        description: "Symbol of stock of interest"
+      responses:
+        200:
+          description: "Fetch was successful"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/DailyQuote'
+
+  /stock/{symbol}/intraday:
+    get:
+      tags:
+      - "Stocks"
+      summary: "Get stock intraday data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: symbol
+        required: true
+        type: "string"
+        description: "Symbol of stock of interest"
+      responses:
+        200:
+          description: "Fetch was successful"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/DailyQuote'
+        500:
+          description: "Something went wrong"
+
+definitions:
+  Hello:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+
+  DailyQuote:
+    type: "object"
+    properties:
+      symbol:
+        type: "string"
+      date:
+        type: "string"
+        format: "yyyy-MM-ddTHH:mm:ss"
+      open:
+        type: "number"
+      high:
+        type: "number"
+      low:
+        type: "number"
+      close:
+        type: "number"
+      volume:
+        type: "integer"
+
+  Symbol:
+    type: "object"
+    properties:
+      symbol:
+        type: "string"
+      name:
+        type: "string"
+        format: "yyyy-MM-ddTHH:mm:ss"
+      type:
+        type: "string"
+      region:
+        type: "string"
+      marketOpen:
+        type: "string"
+      marketClose:
+        type: "string"
+      timeZone:
+        type: "string"
+      currency:
+        type: "string"
+
+  StockListDataObject:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the stock."
+      symbol:
+        type: "string"
+        description: "Symbol of the stock."
+      high:
+        type: "number"
+        description: "High point of the current day"
+      low:
+        type: "number"
+        description: "Low point of the current day"
+      revenue:
+        type: "number"
+        description: "Revenue/change since last day closing value"
+      close:
+        type: "number"
+        description: "Last known value"
+
