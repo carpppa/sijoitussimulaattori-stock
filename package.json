@@ -60,6 +60,7 @@
     "knex": "^0.15.2",
     "pg": "^7.6.0",
     "redis": "^2.8.0",
+    "swagger-ui-express": "^4.0.2",
     "winston": "^3.1.0"
   },
   "devDependencies": {
@@ -73,6 +74,7 @@
     "@types/pg": "^7.4.11",
     "@types/redis": "^2.8.8",
     "@types/supertest": "^2.0.6",
+    "@types/swagger-ui-express": "^3.0.0",
     "concurrently": "^4.0.1",
     "env-cmd": "^8.0.2",
     "jest": "^23.6.0",

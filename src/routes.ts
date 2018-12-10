@@ -2,15 +2,21 @@ import { Request, Response } from 'express';
 import * as express from 'express';
 import * as validation from 'express-joi-validation';
 import * as Joi from 'joi';
+import * as swaggerUi from 'swagger-ui-express';
 
+import * as swaggerDocument from './docs/swagger.json';
 import { getDailySeries } from './services/db';
-import { equitySymbol, helloName, dailyQuotes } from './validation';
 import { getIntraDaySeries } from './services/redis';
+import { dailyQuotes, equitySymbol, helloName } from './validation';
 
 export class Routes {
   private validator = validation({ passError: true });
 
   public routes(app: express.Application): void {
+
+    app
+      .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+
     app.route('/').get((req: Request, res: Response) => {
       res.status(200).send({
         message: 'Hello, World!',
