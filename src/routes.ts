@@ -28,17 +28,17 @@ export class Routes {
       });
 
     app
-      .route('/stock/:symbol')
+      .route('/stocks/:symbol')
       .get(this.validator.params(equitySymbol), getAllStockData);
 
     app
-      .route('/stock/:symbol/history')
+      .route('/stocks/:symbol/history')
       .get(this.validator.params(equitySymbol), getHistory);
 
     app
-      .route('/stock/:symbol/intraday')
+      .route('/stocks/:symbol/intraday')
       .get(this.validator.params(equitySymbol), getIntraday);
 
-    app.route('/stock').get(getStockListing);
+    app.route('/stocks').get(getStockListing);
   }
 }
