@@ -22,33 +22,4 @@ interface Symbol {
   currency: string;
 }
 
-interface Stock {
-  symbol: string;
-  name: string;
-  high: number;
-  low: number;
-  revenue: number;
-  close: number;
-}
-
-interface allStockData {
-  symbol: SymbolName;
-  name: string;
-  type: string;
-  region: string;
-  marketOpen: string;
-  marketClose: string;
-  timeZone: string;
-  currency: string;
-  dailyQuotes: DailyQuote[];
-  intraDay: DailyQuote[];
-}
-
-export {
-  SymbolName,
-  SUPPORTED_SYMBOLS,
-  DailyQuote,
-  Symbol,
-  Stock,
-  allStockData,
-};
+export { SymbolName, SUPPORTED_SYMBOLS, DailyQuote, Symbol };

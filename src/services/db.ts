@@ -31,7 +31,6 @@ const getSymbol = async (symbol: SymbolName): Promise<Symbol[]> => {
     return (await client
       .select()
       .from(DatabaseTables.Symbols)
-
       .where(SymbolsTable.Symbol, symbol)) as Symbol[];
   } catch (error) {
     logger.error('fetching symbols', error);

@@ -24,4 +24,8 @@ const getOrThrow = <T>(prop: string, obj: { [key: string]: any }) => {
   throw new Error(`property ${prop} does not exist in the object`);
 };
 
-export { ensureNecessaryEnvs, randomInt, getOrThrow };
+function isDefined<T>(item: T | undefined): item is T {
+  return item !== undefined;
+}
+
+export { ensureNecessaryEnvs, randomInt, getOrThrow, isDefined };
