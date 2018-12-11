@@ -13,22 +13,15 @@
       "description": ""
     }
   ],
-  "schemes": [
-    "https",
-    "http"
-  ],
+  "schemes": ["https", "http"],
   "paths": {
     "/": {
       "get": {
-        "tags": [
-          "test"
-        ],
+        "tags": ["test"],
         "summary": "Test api",
         "description": "",
         "operationId": "getHello",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Delete was successful",
@@ -41,13 +34,9 @@
     },
     "/hello": {
       "get": {
-        "tags": [
-          "test"
-        ],
+        "tags": ["test"],
         "summary": "Test api",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Delete was successful",
@@ -58,15 +47,11 @@
         }
       }
     },
-    "/stock": {
+    "/stocks": {
       "get": {
-        "tags": [
-          "Stocks"
-        ],
+        "tags": ["Stocks"],
         "summary": "Get list of stocks",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Delete was successful",
@@ -80,15 +65,11 @@
         }
       }
     },
-    "/stock/{symbol}": {
+    "/stocks/{symbol}": {
       "get": {
-        "tags": [
-          "Stocks"
-        ],
+        "tags": ["Stocks"],
         "summary": "Get stock data",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "in": "path",
@@ -102,38 +83,17 @@
           "200": {
             "description": "Delete was successful",
             "schema": {
-              "type": "object",
-              "properties": {
-                "dailyQuotes": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/DailyQuote"
-                  }
-                },
-                "intraDay": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/DailyQuote"
-                  }
-                },
-                "symbol": {
-                  "$ref": "#/definitions/Symbol"
-                }
-              }
+              "$ref": "#/definitions/Symbol"
             }
           }
         }
       }
     },
-    "/stock/{symbol}/history": {
+    "/stocks/{symbol}/history": {
       "get": {
-        "tags": [
-          "Stocks"
-        ],
+        "tags": ["Stocks"],
         "summary": "Get stock daily data",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "in": "path",
@@ -156,15 +116,11 @@
         }
       }
     },
-    "/stock/{symbol}/intraday": {
+    "/stocks/{symbol}/intraday": {
       "get": {
-        "tags": [
-          "Stocks"
-        ],
+        "tags": ["Stocks"],
         "summary": "Get stock intraday data",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "in": "path",
@@ -254,6 +210,18 @@
         },
         "currency": {
           "type": "string"
+        },
+        "dailyQuotes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DailyQuote"
+          }
+        },
+        "intraDay": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DailyQuote"
+          }
         }
       }
     },
