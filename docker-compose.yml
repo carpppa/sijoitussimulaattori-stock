@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - '192.168.99.100:5432:5432'
+      - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -18,21 +18,21 @@ services:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
     ports:
-      - '192.168.99.100:7432:5432'
+      - '7432:5432'
     volumes:
       - pgtestdata:/var/lib/postgresql/test-data
 
   redis:
     image: redis:3.2
     ports:
-      - '192.168.99.100:6379:6379'
+      - '6379:6379'
     volumes:
       - redisdata:/var/lib/redis/data
 
   test-redis:
     image: redis:3.2
     ports:
-      - '192.168.99.100:6380:6379'
+      - '6380:6379'
     volumes:
       - redistestdata:/var/lib/redis/data
 
