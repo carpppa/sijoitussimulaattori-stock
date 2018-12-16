@@ -1,5 +1,5 @@
-type SymbolName = 'AAPL' | 'AMZN'; // | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
-const SUPPORTED_SYMBOLS: SymbolName[] = ['AAPL', 'AMZN']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
+type SymbolName = 'AAPL'; // AMZN | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
+const SUPPORTED_SYMBOLS: SymbolName[] = ['AAPL']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
 
 interface DailyQuote {
   symbol: SymbolName;

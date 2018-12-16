@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 import { getAllSymbols, getDailySeries, getLatestDailySeriesEntry, getSymbol } from '../services/db';
 import { getIntraDaySeries, getLatestIntraDayQuotes } from '../services/redis';
 import { isDefined } from '../util/general';
-import { allStockData, dailyQuotes, stockListing } from '../validation';
+import { dailyQuotes, metaData, stockListing } from '../validation';
 
 interface Stock {
   symbol: string;
@@ -17,20 +17,9 @@ interface Stock {
 
 const getAllStockData = async (req: Request, res: Response) => {
   try {
-    const [history, intraDay, metaData] = await Promise.all([
-      getDailySeries(req.params.symbol),
-      getIntraDaySeries(req.params.symbol),
-      getSymbol(req.params.symbol),
-    ]);
-
-    const data = {
-      ...metaData[0],
-      dailyQuotes: history,
-      intraDay: intraDay,
-    };
-
-    Joi.assert(data, allStockData);
-    res.json(data);
+    const symbol = await getSymbol(req.params.symbol);
+    Joi.assert(symbol[0], metaData);
+    res.json(symbol[0]);
   } catch (error) {
     res.boom.badImplementation();
   }

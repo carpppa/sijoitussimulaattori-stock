@@ -210,18 +210,6 @@
         },
         "currency": {
           "type": "string"
-        },
-        "dailyQuotes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/DailyQuote"
-          }
-        },
-        "intraDay": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/DailyQuote"
-          }
         }
       }
     },

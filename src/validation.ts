@@ -38,7 +38,7 @@ const stockData = Joi.object({
   close: Joi.number().required(),
 });
 
-const allStockData = Joi.object({
+const metaData = Joi.object({
   symbol: Joi.string().required(),
   name: Joi.string().required(),
   type: Joi.string().required(),
@@ -47,8 +47,6 @@ const allStockData = Joi.object({
   marketClose: Joi.string().required(),
   timeZone: Joi.string().required(),
   currency: Joi.string().required(),
-  dailyQuotes: dailyQuotes,
-  intraDay: dailyQuotes,
 });
 
 const stockListing = Joi.array().items(stockData);
@@ -59,5 +57,5 @@ export {
   helloName,
   stockListing,
   stockData,
-  allStockData,
+  metaData,
 };
