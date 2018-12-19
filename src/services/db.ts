@@ -5,6 +5,8 @@ import { logger } from '../util/logger';
 import { getAvDailySeries, getAvSymbolMetaData } from './alpha-vantage';
 import { DailyQuote, SUPPORTED_SYMBOLS, Symbol, SymbolName } from './stock-data-types';
 
+const STOCK_HISTORY_LIMIT_DATE: number = new Date('2018-01-01').getTime();
+
 const getDailySeries = async (symbol: SymbolName): Promise<DailyQuote[]> => {
   try {
     return (await client
@@ -128,13 +130,21 @@ const populateDb = async (symbols?: SymbolName[]): Promise<void> => {
               dailyQuotes[0].symbol
             );
 
-            return !latestQuote
-              ? dailyQuotes
-              : dailyQuotes.slice(
-                  dailyQuotes.findIndex(
-                    (quote) => quote.date > latestQuote.date
-                  )
-                );
+            if (!latestQuote) {
+              return dailyQuotes.slice(
+                dailyQuotes.findIndex(
+                  (quote) => quote.date.getTime() >= STOCK_HISTORY_LIMIT_DATE
+                )
+              );
+            }
+
+            const lastQuoteIndex = dailyQuotes.findIndex(
+              (quote) =>
+                quote.date.getTime() >
+                latestQuote.date.getTime() -
+                  latestQuote.date.getTimezoneOffset() * 60000
+            );
+            return lastQuoteIndex < 0 ? [] : dailyQuotes.slice(lastQuoteIndex);
           } catch (error) {
             logger.error('cleaning series', error);
             return undefined;

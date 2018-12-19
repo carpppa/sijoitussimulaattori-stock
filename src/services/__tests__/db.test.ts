@@ -4,7 +4,7 @@ import { client } from '../../db';
 import { getAllSymbols, getDailySeries, populateDb } from '../db';
 import { dailySeriesData, dailySeriesLatestData, mockAvEndpoint, symbolData } from './util/alpha-vantage-mock';
 import * as dailySeriesLatest from './util/data/daily-series-latest.json';
-import * as dailySeries from './util/data/daily-series.json';
+import * as dailySeriesWithPreHistory from './util/data/daily-series-with-pre-history.json';
 import * as symbolSearch from './util/data/symbol-search.json';
 
 import 'jest';
@@ -34,7 +34,7 @@ describe('Database', async () => {
         outputsize: 'full',
       },
       200,
-      dailySeries
+      dailySeriesWithPreHistory
     );
 
     await populateDb(['AAPL']);
