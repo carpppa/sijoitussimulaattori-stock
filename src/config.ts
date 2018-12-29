@@ -20,14 +20,16 @@ const config = {
     ALPHA_VANTAGE_URL: process.env.ALPHA_VANTAGE_URL || '',
     ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY || '',
     CI: process.env.TRAVIS || false,
+    TIME_ZONE: process.env.TZ || 'GMT',
   },
   db: {
     CONNECTION_STRING: process.env.DATABASE_URL || '',
-    TIME_ZONE: process.env.TZ || 'GMT',
   },
   redis: {
     REDIS_URL: process.env.REDIS_URL || '',
   },
 };
+
+process.env.TZ = config.app.TIME_ZONE;
 
 export default config;
