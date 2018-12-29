@@ -3,17 +3,9 @@ import * as Joi from 'joi';
 
 import { getAllSymbols, getDailySeries, getLatestDailySeriesEntry, getSymbol } from '../services/db';
 import { getIntraDaySeries, getLatestIntraDayQuotes } from '../services/redis';
+import { Stock } from '../services/stock-data-types';
 import { isDefined } from '../util/general';
 import { dailyQuotes, metaData, stockListing } from '../validation';
-
-interface Stock {
-  symbol: string;
-  name: string;
-  high: number;
-  low: number;
-  revenue: number;
-  close: number;
-}
 
 const getAllStockData = async (req: Request, res: Response) => {
   try {

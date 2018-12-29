@@ -1,6 +1,15 @@
 type SymbolName = 'AAPL'; // AMZN | 'BABA' | 'BAC' | 'DIS' | 'GOOGL';
 const SUPPORTED_SYMBOLS: SymbolName[] = ['AAPL']; //, 'AMZN', 'BABA', 'BAC', 'DIS', 'GOOGL'];
 
+interface Stock {
+  symbol: string;
+  name: string;
+  high: number;
+  low: number;
+  revenue: number;
+  close: number;
+}
+
 interface DailyQuote {
   symbol: SymbolName;
   date: Date;
@@ -22,4 +31,4 @@ interface Symbol {
   currency: string;
 }
 
-export { SymbolName, SUPPORTED_SYMBOLS, DailyQuote, Symbol };
+export { SymbolName, SUPPORTED_SYMBOLS, Stock, DailyQuote, Symbol };
