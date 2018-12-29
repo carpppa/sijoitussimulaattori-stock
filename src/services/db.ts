@@ -17,9 +17,21 @@ const getDailySeries = async (symbol: SymbolName): Promise<DailyQuote[]> => {
   }
 };
 
-const getSymbols = async (): Promise<Symbol[]> => {
+const getAllSymbols = async (): Promise<Symbol[]> => {
   try {
     return (await client.select().from(DatabaseTables.Symbols)) as Symbol[];
+  } catch (error) {
+    logger.error('fetching symbols', error);
+    throw error;
+  }
+};
+
+const getSymbol = async (symbol: SymbolName): Promise<Symbol[]> => {
+  try {
+    return (await client
+      .select()
+      .from(DatabaseTables.Symbols)
+      .where(SymbolsTable.Symbol, symbol)) as Symbol[];
   } catch (error) {
     logger.error('fetching symbols', error);
     throw error;
@@ -143,4 +155,10 @@ const populateDb = async (symbols?: SymbolName[]): Promise<void> => {
   }
 };
 
-export { getDailySeries, getSymbols, populateDb };
+export {
+  getDailySeries,
+  getAllSymbols,
+  populateDb,
+  getLatestDailySeriesEntry,
+  getSymbol,
+};

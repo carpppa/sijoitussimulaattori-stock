@@ -1,21 +1,17 @@
 import { Request, Response } from 'express';
 import * as express from 'express';
 import * as validation from 'express-joi-validation';
-import * as Joi from 'joi';
 import * as swaggerUi from 'swagger-ui-express';
 
+import { getAllStockData, getHistory, getIntraday, getStockListing } from './controllers/stocks';
 import * as swaggerDocument from './docs/swagger.json';
-import { getDailySeries } from './services/db';
-import { getIntraDaySeries } from './services/redis';
-import { dailyQuotes, equitySymbol, helloName } from './validation';
+import { equitySymbol, helloName } from './validation';
 
 export class Routes {
   private validator = validation({ passError: true });
 
   public routes(app: express.Application): void {
-
-    app
-      .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     app.route('/').get((req: Request, res: Response) => {
       res.status(200).send({
@@ -32,35 +28,17 @@ export class Routes {
       });
 
     app
-      .route('/stock/:symbol/history')
-      .get(
-        this.validator.params(equitySymbol),
-        async (req: Request, res: Response) => {
-          try {
-            const quotes = await getDailySeries(req.params.symbol);
-
-            Joi.assert(quotes, dailyQuotes);
-            res.json(quotes);
-          } catch (error) {
-            res.boom.badImplementation();
-          }
-        }
-      );
+      .route('/stocks/:symbol')
+      .get(this.validator.params(equitySymbol), getAllStockData);
 
     app
-      .route('/stock/:symbol/intraday')
-      .get(
-        this.validator.params(equitySymbol),
-        async (req: Request, res: Response) => {
-          try {
-            const intraday = await getIntraDaySeries(req.params.symbol);
+      .route('/stocks/:symbol/history')
+      .get(this.validator.params(equitySymbol), getHistory);
 
-            Joi.assert(intraday, dailyQuotes);
-            res.json(intraday);
-          } catch (error) {
-            res.boom.badImplementation();
-          }
-        }
-      );
+    app
+      .route('/stocks/:symbol/intraday')
+      .get(this.validator.params(equitySymbol), getIntraday);
+
+    app.route('/stocks').get(getStockListing);
   }
 }

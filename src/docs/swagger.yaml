@@ -1,201 +1,181 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: "This is documentation for sijoitussimulaattori-profile API"
-  version: "1.0.0"
-  title: "Sijoitussimulaattori"
-
-host: "localhost:3000"
-basePath: "/"
+  description: This is documentation for sijoitussimulaattori-profile API
+  version: 1.0.0
+  title: Sijoitussimulaattori
+host: 'localhost:3000'
+basePath: /
 tags:
-- name: "test"
-  description: ""
+  - name: test
+    description: ''
 schemes:
-- "https"
-- "http"
+  - https
+  - http
 paths:
   /:
     get:
       tags:
-      - "test"
-      summary: "Test api"
-      description: ""
-      operationId: "getHello"
+        - test
+      summary: Test api
+      description: ''
+      operationId: getHello
       produces:
-      - "application/json"
+        - application/json
       responses:
-        200:
-          description: "Delete was successful"
+        '200':
+          description: Delete was successful
           schema:
-            $ref: "#/definitions/Hello"
-
+            $ref: '#/definitions/Hello'
   /hello:
     get:
       tags:
-      - "test"
-      summary: "Test api"
+        - test
+      summary: Test api
       produces:
-      - "application/json"
+        - application/json
       responses:
-        200:
-          description: "Delete was successful"
+        '200':
+          description: Delete was successful
           schema:
-            $ref: "#/definitions/Hello"
-
-  /stock:
+            $ref: '#/definitions/Hello'
+  /stocks:
     get:
       tags:
-      - "Stocks"
-      summary: "Get list of stocks"
+        - Stocks
+      summary: Get list of stocks
       produces:
-      - "application/json"
+        - application/json
       responses:
-        200:
-          description: "Delete was successful"
+        '200':
+          description: Delete was successful
           schema:
             type: array
             items:
-              $ref: "#/definitions/StockListDataObject"
-
-  /stock/{symbol}:
+              $ref: '#/definitions/StockListDataObject'
+  '/stocks/{symbol}':
     get:
       tags:
-      - "Stocks"
-      summary: "Get stock data"
+        - Stocks
+      summary: Get stock data
       produces:
-      - "application/json"
+        - application/json
       parameters:
-      - in: path
-        name: symbol
-        required: true
-        type: "string"
-        description: "Symbol of stock of interest"
+        - in: path
+          name: symbol
+          required: true
+          type: string
+          description: Symbol of stock of interest
       responses:
-        200:
-          description: "Delete was successful"
+        '200':
+          description: Delete was successful
           schema:
-            type: "object"
-            properties:
-              dailyQuotes:
-                type: "array"
-                items:
-                  $ref: '#/definitions/DailyQuote'
-              intraDay:
-                type: "array"
-                items:
-                  $ref: '#/definitions/DailyQuote'
-              symbol:
-                $ref: '#/definitions/Symbol'
+            $ref: '#/definitions/Symbol'
 
-  /stock/{symbol}/history:
+  '/stocks/{symbol}/history':
     get:
       tags:
-      - "Stocks"
-      summary: "Get stock daily data"
+        - Stocks
+      summary: Get stock daily data
       produces:
-      - "application/json"
+        - application/json
       parameters:
-      - in: path
-        name: symbol
-        required: true
-        type: "string"
-        description: "Symbol of stock of interest"
+        - in: path
+          name: symbol
+          required: true
+          type: string
+          description: Symbol of stock of interest
       responses:
-        200:
-          description: "Fetch was successful"
+        '200':
+          description: Fetch was successful
           schema:
-            type: "array"
+            type: array
             items:
               $ref: '#/definitions/DailyQuote'
-
-  /stock/{symbol}/intraday:
+  '/stocks/{symbol}/intraday':
     get:
       tags:
-      - "Stocks"
-      summary: "Get stock intraday data"
+        - Stocks
+      summary: Get stock intraday data
       produces:
-      - "application/json"
+        - application/json
       parameters:
-      - in: path
-        name: symbol
-        required: true
-        type: "string"
-        description: "Symbol of stock of interest"
+        - in: path
+          name: symbol
+          required: true
+          type: string
+          description: Symbol of stock of interest
       responses:
-        200:
-          description: "Fetch was successful"
+        '200':
+          description: Fetch was successful
           schema:
-            type: "array"
+            type: array
             items:
               $ref: '#/definitions/DailyQuote'
-        500:
-          description: "Something went wrong"
-
+        '500':
+          description: Something went wrong
 definitions:
   Hello:
-    type: "object"
+    type: object
     properties:
       message:
-        type: "string"
-
+        type: string
   DailyQuote:
-    type: "object"
+    type: object
     properties:
       symbol:
-        type: "string"
+        type: string
       date:
-        type: "string"
-        format: "yyyy-MM-ddTHH:mm:ss"
+        type: string
+        format: 'yyyy-MM-ddTHH:mm:ss'
       open:
-        type: "number"
+        type: number
       high:
-        type: "number"
+        type: number
       low:
-        type: "number"
+        type: number
       close:
-        type: "number"
+        type: number
       volume:
-        type: "integer"
-
+        type: integer
   Symbol:
-    type: "object"
+    type: object
     properties:
       symbol:
-        type: "string"
+        type: string
       name:
-        type: "string"
-        format: "yyyy-MM-ddTHH:mm:ss"
+        type: string
+        format: 'yyyy-MM-ddTHH:mm:ss'
       type:
-        type: "string"
+        type: string
       region:
-        type: "string"
+        type: string
       marketOpen:
-        type: "string"
+        type: string
       marketClose:
-        type: "string"
+        type: string
       timeZone:
-        type: "string"
+        type: string
       currency:
-        type: "string"
+        type: string
 
   StockListDataObject:
-    type: "object"
+    type: object
     properties:
       name:
-        type: "string"
-        description: "Name of the stock."
+        type: string
+        description: Name of the stock.
       symbol:
-        type: "string"
-        description: "Symbol of the stock."
+        type: string
+        description: Symbol of the stock.
       high:
-        type: "number"
-        description: "High point of the current day"
+        type: number
+        description: High point of the current day
       low:
-        type: "number"
-        description: "Low point of the current day"
+        type: number
+        description: Low point of the current day
       revenue:
-        type: "number"
-        description: "Revenue/change since last day closing value"
+        type: number
+        description: Revenue/change since last day closing value
       close:
-        type: "number"
-        description: "Last known value"
-
+        type: number
+        description: Last known value
