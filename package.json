@@ -41,7 +41,20 @@
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
-    "testRegex": "(/__tests__/.*(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
+    "testRegex": "(/__tests__/.*(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js,tsx,ts}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "./index.ts",
+      "alpha-vantage-dev-server",
+      "dist",
+      "reports/",
+      "/node_modules/",
+      "/vendor/"
+    ],
+    "coverageDirectory": "reports"
   },
   "repository": {
     "type": "git",
