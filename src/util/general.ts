@@ -1,6 +1,6 @@
 const ensureNecessaryEnvs = (mandatoryEnvs: string[]): void => {
   // Ensure required ENV vars are set
-  let missingEnvs = mandatoryEnvs.filter(
+  const missingEnvs = mandatoryEnvs.filter(
     (env) => !(typeof process.env[env] !== 'undefined')
   );
 
@@ -20,7 +20,9 @@ const randomInt = (
 };
 
 const getOrThrow = <T>(prop: string, obj: { [key: string]: any }) => {
-  if (prop in obj) return obj[prop] as T;
+  if (prop in obj) {
+    return obj[prop] as T;
+  }
   throw new Error(`property ${prop} does not exist in the object`);
 };
 

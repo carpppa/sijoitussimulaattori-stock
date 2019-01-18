@@ -111,9 +111,7 @@ const populateDb = async (symbols?: SymbolName[]): Promise<void> => {
       symbolNames.map(async (symbol) =>
         getAvDailySeries(
           symbol,
-          insertedSymbols
-            .filter((symbol) => !isUndefined(symbol))
-            .includes(symbol)
+          insertedSymbols.filter((s) => !isUndefined(s)).includes(symbol)
             ? 'full'
             : 'compact'
         )

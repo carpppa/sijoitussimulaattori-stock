@@ -1,6 +1,7 @@
 import { ensureNecessaryEnvs } from './util/general';
 
 process.on('uncaughtException', (err) => {
+  // tslint:disable-next-line:no-console
   console.log('\x1b[31m', 'error: uncaught exception:', err);
 });
 

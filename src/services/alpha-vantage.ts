@@ -120,7 +120,7 @@ const avTimeSeriesToDailyQuotes = (
         high: Number.parseFloat(entry[1]['2. high']),
         low: Number.parseFloat(entry[1]['3. low']),
         close: Number.parseFloat(entry[1]['4. close']),
-        volume: Number.parseInt(entry[1]['5. volume']),
+        volume: Number.parseInt(entry[1]['5. volume'], 10),
       } as DailyQuote)
   );
   return dailySeries;
