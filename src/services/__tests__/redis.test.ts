@@ -1,7 +1,7 @@
 import nock = require('nock');
 
 import { closeConnection } from '../../redis';
-import { flushCache, getIntraDaySeries, populateCache } from '../redis';
+import { flushCache, getIntraDaySeries, getLatestIntraDayQuote, populateCache } from '../redis';
 import { intradayData, intradayLatestData, intradayNewDayData, mockAvEndpoint } from './util/alpha-vantage-mock';
 import * as intradaySeriesLatest from './util/data/intraday-series-latest.json';
 import * as intradaySeriesNewDay from './util/data/intraday-series-new-day.json';
@@ -34,6 +34,9 @@ describe('Redis cache', async () => {
 
     const cacheSeries = await getIntraDaySeries('AAPL');
     expect(cacheSeries).toEqual(intradayData);
+
+    const latestQuote = await getLatestIntraDayQuote('AAPL');
+    expect(latestQuote).toEqual(intradayData[0]);
 
     expect(nock.pendingMocks().length).toEqual(0);
   });

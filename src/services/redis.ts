@@ -244,7 +244,7 @@ const getIntraDaySeries = async (symbol: SymbolName): Promise<DailyQuote[]> => {
   }
 };
 
-const getLatestIntraDayQuotes = async (
+const getLatestIntraDayQuote = async (
   symbol: SymbolName
 ): Promise<DailyQuote | undefined> => {
   try {
@@ -259,9 +259,4 @@ const getLatestIntraDayQuotes = async (
   }
 };
 
-export {
-  populateCache,
-  flushCache,
-  getIntraDaySeries,
-  getLatestIntraDayQuotes,
-};
+export { populateCache, flushCache, getIntraDaySeries, getLatestIntraDayQuote };
