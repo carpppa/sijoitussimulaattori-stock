@@ -1,4 +1,4 @@
-import supertest = require('supertest');
+import * as supertest from 'supertest';
 
 import app from '../app';
 import { dailySeriesData, intradayData, symbolData } from '../services/__tests__/util/alpha-vantage-mock';
