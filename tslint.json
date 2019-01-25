@@ -1,0 +1,23 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "array-type": [true, "array"],
+    "ban-types": [true, ["Object"], ["String"], ["Boolean"]],
+    "class-name": true,
+    "interface-name": [true, "never-prefix"],
+    "jsdoc-format": false,
+    "max-classes-per-file": false,
+    "member-access": false,
+    "member-ordering": false,
+    "no-console": [true, "log", "error"],
+    "object-literal-shorthand": false,
+    "object-literal-sort-keys": false,
+    "quotemark": [true, "single"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "trailing-comma": true,
+    "triple-equals": true
+  },
+  "rulesDirectory": []
+}

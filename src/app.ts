@@ -1,10 +1,11 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
-import * as Joi from 'joi';
-import * as boom from 'express-boom';
 import { NextFunction, Request, Response } from 'express';
-import { Routes } from './routes';
+import * as boom from 'express-boom';
 import * as expressWinston from 'express-winston';
+import * as Joi from 'joi';
+
+import { Routes } from './routes';
 import { logger } from './util/logger';
 
 interface JoiExpressError extends Error {

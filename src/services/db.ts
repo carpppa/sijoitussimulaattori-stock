@@ -28,12 +28,13 @@ const getAllSymbols = async (): Promise<Symbol[]> => {
   }
 };
 
-const getSymbol = async (symbol: SymbolName): Promise<Symbol[]> => {
+const getSymbol = async (symbol: SymbolName): Promise<Symbol> => {
   try {
     return (await client
       .select()
       .from(DatabaseTables.Symbols)
-      .where(SymbolsTable.Symbol, symbol)) as Symbol[];
+      .where(SymbolsTable.Symbol, symbol)
+      .first()) as Symbol;
   } catch (error) {
     logger.error('fetching symbols', error);
     throw error;
@@ -110,9 +111,7 @@ const populateDb = async (symbols?: SymbolName[]): Promise<void> => {
       symbolNames.map(async (symbol) =>
         getAvDailySeries(
           symbol,
-          insertedSymbols
-            .filter((symbol) => !isUndefined(symbol))
-            .includes(symbol)
+          insertedSymbols.filter((s) => !isUndefined(s)).includes(symbol)
             ? 'full'
             : 'compact'
         )

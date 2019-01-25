@@ -1,6 +1,7 @@
 # Project
 dist/
 .env
+reports/
 
 # Miscellaneous
 .DS_Store
