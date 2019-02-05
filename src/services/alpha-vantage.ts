@@ -114,7 +114,7 @@ const parseAvDateToUTC = (
   switch (timezone) {
     case 'US/Eastern':
       // GMT-5
-      return new Date(new Date(avDate).getTime() - 5 * 3600000);
+      return new Date(new Date(avDate).getTime() + 5 * 3600000);
     default:
       return new Date(avDate);
   }
