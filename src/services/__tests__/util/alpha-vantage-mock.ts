@@ -89,7 +89,7 @@ const dailySeriesLatestData: DailyQuote[] = [
 const intradayData: DailyQuote[] = [
   {
     symbol: 'AAPL',
-    date: new Date('2018-11-29 15:50:00'),
+    date: new Date('2018-11-29 10:50:00'),
     open: 179.94,
     high: 180.05,
     low: 179.81,
@@ -98,7 +98,7 @@ const intradayData: DailyQuote[] = [
   },
   {
     symbol: 'AAPL',
-    date: new Date('2018-11-29 15:45:00'),
+    date: new Date('2018-11-29 10:45:00'),
     open: 179.77,
     high: 179.95,
     low: 179.76,
@@ -110,7 +110,7 @@ const intradayData: DailyQuote[] = [
 const intradayLatestData: DailyQuote[] = [
   {
     symbol: 'AAPL',
-    date: new Date('2018-11-29 16:00:00'),
+    date: new Date('2018-11-29 11:00:00'),
     open: 179.86,
     high: 179.86,
     low: 179.5,
@@ -119,7 +119,7 @@ const intradayLatestData: DailyQuote[] = [
   },
   {
     symbol: 'AAPL',
-    date: new Date('2018-11-29 15:55:00'),
+    date: new Date('2018-11-29 10:55:00'),
     open: 179.83,
     high: 179.94,
     low: 179.66,
@@ -128,7 +128,7 @@ const intradayLatestData: DailyQuote[] = [
   },
   {
     symbol: 'AAPL',
-    date: new Date('2018-11-29 15:50:00'),
+    date: new Date('2018-11-29 10:50:00'),
     open: 179.94,
     high: 180.05,
     low: 179.81,
@@ -137,7 +137,7 @@ const intradayLatestData: DailyQuote[] = [
   },
   {
     symbol: 'AAPL',
-    date: new Date('2018-11-29 15:45:00'),
+    date: new Date('2018-11-29 10:45:00'),
     open: 179.77,
     high: 179.95,
     low: 179.76,
@@ -149,7 +149,7 @@ const intradayLatestData: DailyQuote[] = [
 const intradayNewDayData: DailyQuote[] = [
   {
     symbol: 'AAPL',
-    date: new Date('2018-11-30 16:00:00'),
+    date: new Date('2018-11-30 11:00:00'),
     open: 135.57,
     high: 135.57,
     low: 135.59,
@@ -158,7 +158,7 @@ const intradayNewDayData: DailyQuote[] = [
   },
   {
     symbol: 'AAPL',
-    date: new Date('2018-11-30 15:55:00'),
+    date: new Date('2018-11-30 10:55:00'),
     open: 135.81,
     high: 135.93,
     low: 135.65,

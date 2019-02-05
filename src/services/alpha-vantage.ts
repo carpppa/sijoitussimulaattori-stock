@@ -51,7 +51,7 @@ interface AvIntraDaySeriesMetaData<Interval = AvInterval> {
     '3. Last Refreshed': string;
     '4. Interval': Interval;
     '5. Output Size': 'Compact' | 'Full size';
-    '6. Time Zone': string;
+    '6. Time Zone': AvDailySeries['Meta Data']['5. Time Zone'];
   };
 }
 
@@ -107,15 +107,29 @@ const makeAvRequest = async <T>(
   }
 };
 
+const parseAvDateToUTC = (
+  avDate: string,
+  timezone?: AvIntraDaySeriesMetaData['Meta Data']['6. Time Zone']
+): Date => {
+  switch (timezone) {
+    case 'US/Eastern':
+      // GMT-5
+      return new Date(new Date(avDate).getTime() - 5 * 3600000);
+    default:
+      return new Date(avDate);
+  }
+};
+
 const avTimeSeriesToDailyQuotes = (
   symbol: SymbolName,
-  avTimeSeries: [string, AvDailyQuote][]
+  avTimeSeries: [string, AvDailyQuote][],
+  timezone?: AvIntraDaySeriesMetaData['Meta Data']['6. Time Zone']
 ): DailyQuote[] => {
   const dailySeries = avTimeSeries.map(
     (entry) =>
       ({
         symbol: symbol,
-        date: new Date(entry[0]),
+        date: parseAvDateToUTC(entry[0], timezone),
         open: Number.parseFloat(entry[1]['1. open']),
         high: Number.parseFloat(entry[1]['2. high']),
         low: Number.parseFloat(entry[1]['3. low']),
@@ -166,7 +180,8 @@ const getAvIntraDaySeries = async (
 
     const timeSeries = avTimeSeriesToDailyQuotes(
       symbol,
-      Object.entries(avIntraDaySeries.data['Time Series (5min)'])
+      Object.entries(avIntraDaySeries.data['Time Series (5min)']),
+      avIntraDaySeries.data['Meta Data']['6. Time Zone']
     );
     const prevMidnight = new Date(
       new Date(timeSeries[0].date).setUTCHours(0, 0, 0, 0)
