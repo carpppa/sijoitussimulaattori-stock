@@ -74,7 +74,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-boom": "^2.0.0",
     "express-joi-validation": "^0.3.0",
     "express-winston": "^3.0.1",
